@@ -144,7 +144,25 @@ const ACCOUNT_LOCKED = {
   }],
 };
 
+/**
+ * User Not Found
+ *
+ * @description The user was not found in the database
+ */
+const USER_NOT_FOUND = user => ({
+  name: 'AppError',
+  message: 'User not found',
+  statusCode: '400',
+  errors: [{
+    statusCode: '400',
+    message: 'The user was not found',
+    code: 'USER_NOT_FOUND',
+    meta: { uuid: user.uuid },
+  }],
+});
+
 module.exports = {
+  USER_NOT_FOUND,
   DUPLICATE_EMAIL,
   INVALID_PASSWORD,
   INVALID_TOKEN,

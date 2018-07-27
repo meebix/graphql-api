@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const logger = require('local-logger');
 const config = require('config');
 const md5 = require('md5');
-const generateCode = require('local-generate-code');
+const generateToken = require('local-generate-token');
 const addMinutes = require('date-fns/add_minutes');
 const ApiError = require('local-errors');
 const formatError = require('local-error-handler');
@@ -10,9 +10,6 @@ const authErrors = require('./auth-errors');
 const emailOpts = require('./auth-email-options');
 const mailer = require('local-mailer');
 const knex = require('knex')(config.database);
-const { UserModel } = require('local-models');
-
-const User = new UserModel();
 
 /**
  * User sign up flow
@@ -351,7 +348,7 @@ const verifySecurityQuestions = (req, res) => {
 
           return User.update(user, {
             account_locked: true,
-            [codeField]: generateCode(),
+            [codeField]: generateToken(),
             [expiresField]: addMinutes(new Date(),
               config.auth.tokens.passwordReset.expireTime),
           });
@@ -543,7 +540,7 @@ const resendUnlockAccount = (req, res) =>
       logger.info({ uuid: user.uuid }, 'AUTH-CTRL.REUNLOCK: Creating unlock account token');
 
       return User.update(user, {
-        unlock_account_code: generateCode(),
+        unlock_account_code: generateToken(),
         unlock_account_expires: addMinutes(new Date(), config.auth.tokens.unlockAccount.expireTime),
       });
     })

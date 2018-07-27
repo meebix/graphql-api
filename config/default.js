@@ -33,8 +33,13 @@ module.exports = {
   contentSecurityPolicy: {
     defaultSrc: ["'self'"],
   },
+  mfa: {
+    enableEmails: true,
+    enableTexts: true,
+    enableCalls: true,
+    tokenExpireTime: 15,
+  },
   mailer: {
-    sendEmails: true,
     domain: 'makeitcount.cc',
   },
   graphql: {

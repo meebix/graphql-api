@@ -41,10 +41,14 @@ app.use(cors({
 const verifyJwt = require('middleware/verify-jwt');
 
 // Routes
+const mfaRoutes = require('./api/mfa/mfa-routes');
+const tokenRoutes = require('./api/token/token-routes');
 const authRoutes = require('./api/auth/auth-routes');
 const mailerRoutes = require('./api/mailer/mailer-routes');
 const paymentRoutes = require('./api/payments/payments-routes');
 
+app.use(`${baseUrl}/mfa`, mfaRoutes);
+app.use(`${baseUrl}/token`, tokenRoutes);
 app.use(`${baseUrl}/auth`, authRoutes);
 app.use(`${baseUrl}/mailer`, mailerRoutes);
 app.use(`${baseUrl}/payments`, verifyJwt(), paymentRoutes);

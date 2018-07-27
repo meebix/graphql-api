@@ -1,6 +1,4 @@
 const createUuid = require('uuid/v4');
-const md5 = require('md5');
-const addMinutes = require('date-fns/add_minutes');
 const argon2 = require('argon2');
 const Chance = require('chance');
 
@@ -32,17 +30,9 @@ const seeder = isDevelopment ? (knex, Promise) => {
           last_name: chance.last(),
           email: chance.email(),
           password,
-          street_address: chance.street({ country: 'us', short_suffix: true }),
-          apt_suite: chance.floating({ min: 1000, max: 2000, fixed: 0 }),
-          city: chance.city(),
-          state: chance.state({ country: 'us' }),
-          zip_code: chance.zip(),
-          company: chance.company(),
-          title: chance.profession(),
-          blurb: chance.paragraph({ sentences: 3 }),
+          phone: chance.phone({ formatted: false, country: 'us' }),
           confirmed: false,
-          confirmed_token: md5(`token${Math.random()}`),
-          confirmed_expires: addMinutes(new Date(), 360),
+          locked: false,
         };
 
         rows.push(

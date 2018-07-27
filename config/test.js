@@ -9,7 +9,9 @@ module.exports = {
     jwt: false,
     verifyAccess: false,
   },
-  mailer: {
-    sendEmails: false,
+  mfa: {
+    enableEmails: false,
+    enableTexts: false,
+    enableCalls: false,
   },
 };

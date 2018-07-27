@@ -14,8 +14,10 @@ module.exports = {
     fontSrc: ["'self'", 'data:'],
     imgSrc: ["'self'", 'data:'],
   },
-  mailer: {
-    sendEmails: false,
+  mfa: {
+    enableEmails: true,
+    enableTexts: false,
+    enableCalls: false,
   },
   logger: {
     level: 'debug',
