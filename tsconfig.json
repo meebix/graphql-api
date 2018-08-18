@@ -1,0 +1,26 @@
+{
+  "version": "2.4.2",
+  "compilerOptions": {
+    "lib": ["es5", "es6", "esnext.asynciterable"],
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "outDir": "dist",
+    "baseUrl": "src",
+    "paths": {
+      "entities/*": [ "entities/*" ],
+      "modules/*": [ "modules/*" ],
+      "middleware/*": [ "middleware/*" ],
+      "seeders/*": [ "seeders/*" ]
+    }
+  },
+  "include": ["src"],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}
