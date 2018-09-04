@@ -3,28 +3,21 @@ import 'app-module-path/register';
 import 'source-map-support/register';
 
 import 'reflect-metadata';
-import * as express from 'express';
-import * as cors from 'cors';
-import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
-import * as helmet from 'helmet';
-import * as config from 'config';
-import * as healthCheck from 'express-healthcheck';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import config from 'config';
+import healthCheck from 'express-healthcheck';
 import { createConnection } from 'typeorm';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import errorHandler from 'modules/local-error-handler';
 import logger from 'modules/local-logger';
 import requestLogger from 'middleware/request-logger';
-import graphqlSchema from './api/graphql/graphql-schema';
-
-import tokenRoutes from './api/token/token-routes';
+import routes from './routes';
 
 const app = express();
 const baseUrl = '/api';
-const graphqlUrl = `${baseUrl}/graphql`;
-const appRoutes = [
-  tokenRoutes,
-];
 
 // Security Headers
 app.use(helmet());
@@ -46,30 +39,7 @@ app.use(cors({
 }));
 
 // Register application routes
-appRoutes.forEach((entry) => {
-  entry.actions.forEach((path) => {
-    const route = `${baseUrl}${entry.root}${path.route}`;
-
-    app[path.method](route, ...path.middleware, (req, res, next) => {
-      path.action(req, res)
-        .then(() => next)
-        .catch(err => next(err));
-    });
-  });
-});
-
-// GraphQL
-app.use(graphqlUrl, graphqlExpress(req => ({
-  schema: graphqlSchema,
-  context: {
-    req,
-    user: req.user,
-  },
-})));
-
-if (config.graphql.docs) {
-  app.use(`${baseUrl}/docs`, graphiqlExpress({ endpointURL: graphqlUrl }));
-}
+app.use(baseUrl, routes);
 
 // Handle unknown routes (404s)
 app.use((req, res) => (

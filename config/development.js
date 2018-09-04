@@ -1,8 +1,5 @@
-const ormConfig = require('./orm');
-
 module.exports = {
   port: process.env.PORT || 8080,
-  orm: ormConfig,
   auth: {
     // jwt: false,
     verifyAccess: false,

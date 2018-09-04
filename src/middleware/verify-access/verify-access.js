@@ -1,5 +1,5 @@
-import * as config from 'config';
-import * as objectPath from 'object-path';
+import config from 'config';
+import objectPath from 'object-path';
 import logger from 'modules/local-logger';
 import getPermissions from './access';
 

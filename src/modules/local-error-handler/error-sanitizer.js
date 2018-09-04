@@ -5,6 +5,7 @@ import jwtFormatter from './formatters/jwt-formatter';
 import stripeFormatter from './formatters/stripe-formatter';
 import defaultFormatter from './formatters/default-formatter';
 import typeormFormatter from './formatters/typeorm-formatter';
+import twilioFormatter from './formatters/twilio-formatter';
 
 /**
  * Determines the specific library error signature to be formatted
@@ -16,8 +17,9 @@ import typeormFormatter from './formatters/typeorm-formatter';
 function formatError(err) {
   let { name } = err;
 
-  // When err.name is generic or needs consolidation, need to be more selective
+  // When err.name is generic or grouping is needed
   if (TYPEORM_ERRORS.includes(err.name)) name = 'TypeormError';
+  if (err.name === 'Error' && (err.moreInfo.includes('twilio'))) name = 'TwilioError';
   if (err.name === 'Error' && (err.type && err.type.startsWith('Stripe'))) name = 'StripeError';
 
   switch (name) {
@@ -31,6 +33,8 @@ function formatError(err) {
     case 'TokenExpiredError':
     case 'JsonWebTokenError':
       return jwtFormatter(err);
+    case 'TwilioError':
+      return twilioFormatter(err);
     case 'StripeError':
       return stripeFormatter(err);
     default:

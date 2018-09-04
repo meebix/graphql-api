@@ -1,5 +1,5 @@
-import * as jwt from 'jsonwebtoken';
-import * as config from 'config';
+import jwt from 'jsonwebtoken';
+import config from 'config';
 import logger from 'modules/local-logger';
 
 /**

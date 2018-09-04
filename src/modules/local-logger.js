@@ -1,8 +1,8 @@
-import * as bunyan from 'bunyan';
-import * as PrettyStream from 'bunyan-prettystream';
-import * as config from 'config';
-import * as path from 'path';
-import * as uuid from 'uuid/v4';
+import bunyan from 'bunyan';
+import config from 'config';
+import path from 'path';
+import uuid from 'uuid/v4';
+import PrettyStream from 'bunyan-prettystream';
 
 const prettyStdOut = new PrettyStream();
 const ringbuffer = new bunyan.RingBuffer({ limit: 100 });
@@ -42,7 +42,7 @@ const logger = bunyan.createLogger({
         params: req.params,
         method: req.method,
         url: req.url,
-        user: req.user.uuid,
+        user: req.user && req.user.uuid,
         body: whitelistedBody(),
         headers: whitelistedHeaders(),
         httpVersion: req.httpVersion,

@@ -1,4 +1,4 @@
-const ormConfig = require('./orm');
+const ormConfig = require('../ormconfig');
 
 module.exports = {
   port: process.env.PORT || 8080,
@@ -14,7 +14,7 @@ module.exports = {
       maxAttempts: 5,
     },
     securityQuestions: true,
-    tokens: {
+    code: {
       expireTime: 30, // minutes
     },
   },
@@ -25,7 +25,7 @@ module.exports = {
     enableEmails: true,
     enableTexts: true,
     enableCalls: true,
-    tokenExpireTime: 15,
+    codeExpireTime: 15,
   },
   mailer: {
     domain: 'makeitcount.cc',

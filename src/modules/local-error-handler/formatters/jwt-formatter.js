@@ -1,4 +1,4 @@
-import * as objectPath from 'object-path';
+import objectPath from 'object-path';
 
 /**
  * Format the error according to JsonWebToken (JWT)

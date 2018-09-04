@@ -1,4 +1,4 @@
-import * as AccessControl from 'accesscontrol';
+import AccessControl from 'accesscontrol';
 import rolePermissions from './permissions';
 
 const access = new AccessControl(rolePermissions);

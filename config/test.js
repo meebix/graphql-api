@@ -1,4 +1,4 @@
-const ormConfig = require('./orm');
+const ormConfig = require('../ormconfig');
 
 module.exports = {
   port: process.env.PORT || 8080,

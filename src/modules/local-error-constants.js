@@ -1,4 +1,20 @@
 /**
+ * MISSING_BODY
+ *
+ * @description Required inputs are missing from req.body
+ */
+export const MISSING_BODY = {
+  name: 'AppError',
+  message: 'Required inputs are missing from req.body',
+  statusCode: 400,
+  errors: [{
+    statusCode: 400,
+    message: 'Required inputs are missing from req.body',
+    code: 'MISSING_BODY',
+  }],
+};
+
+/**
  * USER_NOT_FOUND
  *
  * @description The user was not found in the database
@@ -17,55 +33,37 @@ export const USER_NOT_FOUND = meta => ({
 });
 
 /**
- * TOKEN_NOT_FOUND
+ * PROFILE_NOT_FOUND
  *
- * @description The token was not found in the database
+ * @description The user's profile was not found in the database
  * @param {Object} meta - More details about the error
  */
-export const TOKEN_NOT_FOUND = meta => ({
+export const PROFILE_NOT_FOUND = meta => ({
   name: 'AppError',
-  message: 'The token was not found',
+  message: 'The user\'s profile was not found',
   statusCode: 400,
   errors: [{
     statusCode: 400,
-    message: 'The token was not found',
-    code: 'TOKEN_NOT_FOUND',
+    message: 'The user\'s profile was not found',
+    code: 'PROFILE_NOT_FOUND',
     meta,
   }],
 });
 
 /**
- * TOKEN_EXPIRED
+ * CODE_NOT_FOUND
  *
- * @description The token was found, but has expired
+ * @description The MFA code was not found in the database
  * @param {Object} meta - More details about the error
  */
-export const TOKEN_EXPIRED = meta => ({
+export const CODE_NOT_FOUND = meta => ({
   name: 'AppError',
-  message: 'The token has expired',
-  statusCode: 401,
-  errors: [{
-    statusCode: 401,
-    message: 'The token has expired',
-    code: 'TOKEN_EXPIRED',
-    meta,
-  }],
-});
-
-/**
- * INVALID_TOKEN_TYPE
- *
- * @description The token type specified was invalid
- * @param {Object} meta - More details about the error
- */
-export const INVALID_TOKEN_TYPE = meta => ({
-  name: 'AppError',
-  message: 'The token type is invalid',
+  message: 'The code was not found',
   statusCode: 400,
   errors: [{
     statusCode: 400,
-    message: 'The token type is invalid',
-    code: 'INVALID_TOKEN_TYPE',
+    message: 'The code was not found',
+    code: 'CODE_NOT_FOUND',
     meta,
   }],
 });

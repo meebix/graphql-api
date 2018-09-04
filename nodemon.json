@@ -5,7 +5,7 @@
   ],
   "verbose": true,
   "watch": [
-    "dist/"
+    "src/"
   ],
-  "ext": "js ts json"
+  "ext": "js json"
 }

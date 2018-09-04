@@ -1,4 +1,4 @@
-import * as objectPath from 'object-path';
+import objectPath from 'object-path';
 
 /**
  * Prepares errors array for the JSON response
