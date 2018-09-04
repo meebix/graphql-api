@@ -4,15 +4,14 @@ Built with Express.js, REST & GraphQL, TypeORM, and MySQL.
 
 **Features:**
 
-- Security (CORS, CSRF, CSP)
-- Health Check
 - Auth'z & Auth'n (RBAC / JWT)
-- GraphQL Layer
-- Thorough Error Handling
+- Security (CORS, CSRF, CSP)
 - Flexible Config
+- Thorough Error Handling
 - Request Logging (Bunyan)
 - Request Timer
-- Mailer (Sparkpost)
-- Payments (Stripe)
+- Health Check
+- Mailer using Sparkpost
+- SMS using Twilio
 - Testing (Unit, Integration)
 - Linting
