@@ -12,7 +12,7 @@ const seedProfiles = async () => {
   const mock = new Chance();
 
   const users = await userEntity
-    .createQueryBuilder('user')
+    .createQueryBuilder()
     .getMany();
 
   for (let i = 0; i < users.length; i++) {

@@ -21,10 +21,10 @@ const retrieve = async (req, res) => {
 
   try {
     const user = await orm
-      .createQueryBuilder(User, 'user')
-      .select(['user', 'role.name'])
-      .innerJoin('user.role', 'role')
-      .where('user.uuid = :id', { id: userId })
+      .createQueryBuilder(User, 'u')
+      .select(['u', 'role.name'])
+      .innerJoin('u.role', 'role')
+      .where('u.uuid = :id', { id: userId })
       .getOne();
 
     if (!user) throw new ApiError(USER_NOT_FOUND({ uuid: userId }));
@@ -54,10 +54,10 @@ const create = async (req, res) => {
 
     await orm.save(user).then(async (saved) => {
       returningUser = await orm
-        .createQueryBuilder(User, 'user')
-        .select(['user', 'role.name'])
-        .innerJoin('user.role', 'role')
-        .where('user.id = :id', { id: saved.id })
+        .createQueryBuilder(User, 'u')
+        .select(['u', 'role.name'])
+        .innerJoin('u.role', 'role')
+        .where('u.id = :id', { id: saved.id })
         .getOne();
     });
 
@@ -93,10 +93,10 @@ const update = async (req, res) => {
 
     await orm.save(user).then(async (saved) => {
       returningUser = await orm
-        .createQueryBuilder(User, 'user')
-        .select(['user', 'role.name'])
-        .innerJoin('user.role', 'role')
-        .where('user.id = :id', { id: saved.id })
+        .createQueryBuilder(User, 'u')
+        .select(['u', 'role.name'])
+        .innerJoin('u.role', 'role')
+        .where('u.id = :id', { id: saved.id })
         .getOne();
     });
 

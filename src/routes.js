@@ -20,9 +20,11 @@ router.patch('/codes/:codeId', codeCtrl.validate);
 
 // Security questions
 router.route('/users/:userId/security-questions')
-  .get(securityQuestionCtrl.retrieve)
+  .get(securityQuestionCtrl.retrieveAll)
   .post(securityQuestionCtrl.create)
   .patch(securityQuestionCtrl.update);
+
+router.get('/users/:userId/security-questions/:shortName', securityQuestionCtrl.retrieveOne);
 
 // Multi-factor authentication
 router.post('/users/:userId/mfa', mfaCtrl.send);

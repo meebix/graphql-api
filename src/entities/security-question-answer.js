@@ -28,7 +28,7 @@ export default class SecurityQuestionAnswer extends Base {
   user = undefined;
 
   @JoinColumn({ name: 'question_id' })
-  @ManyToOne(() => SecurityQuestion, question => question.id, { eager: true })
+  @ManyToOne(() => SecurityQuestion, question => question.id)
   @IsNotEmpty()
   securityQuestion = undefined;
 

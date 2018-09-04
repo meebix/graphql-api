@@ -14,44 +14,77 @@ import {
 
 import { SQUESTION_NOT_FOUND } from './security-question-errors';
 
-// TODO: need a validate method here
-// should be logging failed attempts
-
 /**
- * Retrieve security questions and answers for a user
+ * Retrieve all security questions and answers for a user
  *
  * @method GET
  * @param {Object} req - HTTP request
  * @param {Object} res - HTTP response
  * @returns {Object} - JSON response
  */
-const retrieve = async (req, res) => {
+const retrieveAll = async (req, res) => {
   const { userId } = req.params;
   const orm = getManager();
 
   try {
     const user = await orm.findOne(User, { uuid: userId });
     const questions = await orm
-      .createQueryBuilder(SecurityQuestionAnswer, 'answer')
-      .select(['answer', 'user.uuid', 'question.shortName'])
-      .innerJoin('answer.user', 'user')
-      .innerJoin('answer.securityQuestion', 'question')
-      .where('answer.user = :userId', { userId: user.id })
+      .createQueryBuilder(SecurityQuestionAnswer, 's')
+      .select(['s', 'user.uuid', 'question.shortName'])
+      .innerJoin('s.user', 'user')
+      .innerJoin('s.securityQuestion', 'question')
+      .where('s.user = :userId', { userId: user.id })
       .getMany();
 
     if (!user) throw new ApiError(USER_NOT_FOUND({ uuid: userId }));
 
     logger.info(
       { uuid: user.uuid },
-      'SECURITY-QUESTION-CTRL.RETRIEVE: Security questions retrieved',
+      'SECURITY-QUESTION-CTRL.RETRIEVE-ALL: Security questions retrieved',
     );
 
     return res.json({ data: { questions } });
   } catch (error) {
-    return errorHandler({ loggerPrefix: 'SECURITY-QUESTION-CTRL.RETRIEVE', error, req, res });
+    return errorHandler({ loggerPrefix: 'SECURITY-QUESTION-CTRL.RETRIEVE-ALL', error, req, res });
   }
 };
 
+/**
+ * Retrieve a single security question answer
+ *
+ * @method GET
+ * @param {Object} req - HTTP request
+ * @param {Object} res - HTTP response
+ * @returns {Object} - JSON response
+ */
+const retrieveOne = async (req, res) => {
+  const { userId, shortName } = req.params;
+  const orm = getManager();
+
+  try {
+    const user = await orm.findOne(User, { uuid: userId });
+    const securityQuestion = await orm.findOne(SecurityQuestion, { shortName });
+    const question = await orm
+      .createQueryBuilder(SecurityQuestionAnswer, 's')
+      .select(['s', 'user.uuid', 'question.shortName'])
+      .innerJoin('s.user', 'user')
+      .innerJoin('s.securityQuestion', 'question')
+      .where('s.user = :userId', { userId: user.id })
+      .andWhere('s.securityQuestion = :question', { question: securityQuestion.id })
+      .getOne();
+
+    if (!user) throw new ApiError(USER_NOT_FOUND({ uuid: userId }));
+
+    logger.info(
+      { uuid: user.uuid, shortName },
+      'SECURITY-QUESTION-CTRL.RETRIEVE-ONE: Security question retrieved',
+    );
+
+    return res.json({ data: { question } });
+  } catch (error) {
+    return errorHandler({ loggerPrefix: 'SECURITY-QUESTION-CTRL.RETRIEVE-ONE', error, req, res });
+  }
+};
 /**
  * Create security questions and answers for a user
  *
@@ -88,11 +121,11 @@ const create = async (req, res) => {
     await Promise.all(entries).then(async (answers) => {
       await orm.save(SecurityQuestionAnswer, answers).then(async () => {
         returningQuestions = await orm
-          .createQueryBuilder(SecurityQuestionAnswer, 'answer')
-          .select(['answer', 'user.uuid', 'question.shortName'])
-          .innerJoin('answer.user', 'user')
-          .innerJoin('answer.securityQuestion', 'question')
-          .where('answer.user = :userId', { userId: user.id })
+          .createQueryBuilder(SecurityQuestionAnswer, 's')
+          .select(['s', 'user.uuid', 'question.shortName'])
+          .innerJoin('s.user', 'user')
+          .innerJoin('s.securityQuestion', 'question')
+          .where('s.user = :userId', { userId: user.id })
           .getMany();
       });
     });
@@ -125,11 +158,11 @@ const update = async (req, res) => {
     const entries = questions.map(async (entry) => {
       const securityQuestion = await orm.findOne(SecurityQuestion, { shortName: entry.question });
       const existingEntry = await orm
-        .createQueryBuilder(SecurityQuestionAnswer, 'table')
-        .innerJoin('table.user', 'user')
-        .innerJoin('table.securityQuestion', 'securityQuestion')
-        .where('table.user = :id', { id: user.id })
-        .andWhere('table.securityQuestion = :question', { question: securityQuestion.id })
+        .createQueryBuilder(SecurityQuestionAnswer, 's')
+        .innerJoin('s.user', 'user')
+        .innerJoin('s.securityQuestion', 'securityQuestion')
+        .where('s.user = :id', { id: user.id })
+        .andWhere('s.securityQuestion = :question', { question: securityQuestion.id })
         .getOne();
 
       if (!user) throw new ApiError(USER_NOT_FOUND({ uuid: userId }));
@@ -151,11 +184,11 @@ const update = async (req, res) => {
 
     await Promise.all(entries).then(async () => {
       returningQuestions = await orm
-        .createQueryBuilder(SecurityQuestionAnswer, 'answer')
-        .select(['answer', 'user.uuid', 'question.shortName'])
-        .innerJoin('answer.user', 'user')
-        .innerJoin('answer.securityQuestion', 'question')
-        .where('answer.user = :userId', { userId: user.id })
+        .createQueryBuilder(SecurityQuestionAnswer, 's')
+        .select(['s', 'user.uuid', 'question.shortName'])
+        .innerJoin('s.user', 'user')
+        .innerJoin('s.securityQuestion', 'question')
+        .where('s.user = :userId', { userId: user.id })
         .getMany();
     });
 
@@ -166,4 +199,4 @@ const update = async (req, res) => {
   }
 };
 
-export default { retrieve, create, update };
+export default { retrieveAll, retrieveOne, create, update };

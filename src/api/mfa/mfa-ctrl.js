@@ -35,14 +35,14 @@ const send = async (req, res) => {
     const profile = await orm.findOne(Profile, { user: user.id });
     const codeType = await orm.findOne(CodeType, { name: type });
     const existingCode = await orm
-      .createQueryBuilder(Code, 'table')
-      .innerJoin('table.user', 'user')
-      .innerJoin('table.codeType', 'codeType')
-      .where('table.user = :id', { id: user.id })
-      .andWhere('table.codeType = :type', { type: codeType.id })
-      .andWhere('table.code = :code', { code })
-      .andWhere('table.delivered = :delivered', { delivered: false })
-      .andWhere('table.used = :used', { used: false })
+      .createQueryBuilder(Code, 'c')
+      .innerJoin('c.user', 'user')
+      .innerJoin('c.codeType', 'codeType')
+      .where('c.user = :id', { id: user.id })
+      .andWhere('c.codeType = :type', { type: codeType.id })
+      .andWhere('c.code = :code', { code })
+      .andWhere('c.delivered = :delivered', { delivered: false })
+      .andWhere('c.used = :used', { used: false })
       .getOne();
 
     if (!user) throw new ApiError(USER_NOT_FOUND({ uuid: userId }));

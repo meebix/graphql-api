@@ -35,12 +35,12 @@ const generate = async (req, res) => {
     const user = await orm.findOne(User, { uuid });
     const codeType = await orm.findOne(CodeType, { name: type });
     const existingCode = await orm
-      .createQueryBuilder(Code, 'table')
-      .innerJoin('table.user', 'user')
-      .innerJoin('table.codeType', 'codeType')
-      .where('table.user = :id', { id: user.id })
-      .andWhere('table.codeType = :type', { type: codeType.id })
-      .andWhere('table.used = :used', { used: false })
+      .createQueryBuilder(Code, 'c')
+      .innerJoin('c.user', 'user')
+      .innerJoin('c.codeType', 'codeType')
+      .where('c.user = :id', { id: user.id })
+      .andWhere('c.codeType = :type', { type: codeType.id })
+      .andWhere('c.used = :used', { used: false })
       .getOne();
     const codeExpired = existingCode
       && compareDates(new Date(), existingCode.expiryDate) > -1;
@@ -53,10 +53,10 @@ const generate = async (req, res) => {
 
       await orm.save(Code, code).then(async (saved) => {
         returningCode = await orm
-          .createQueryBuilder(Code, 'code')
-          .select(['code', 'user.uuid'])
-          .innerJoin('code.user', 'user')
-          .where('code.id = :id', { id: saved.id })
+          .createQueryBuilder(Code, 'c')
+          .select(['c', 'user.uuid'])
+          .innerJoin('c.user', 'user')
+          .where('c.id = :id', { id: saved.id })
           .getOne();
       });
 
@@ -68,10 +68,10 @@ const generate = async (req, res) => {
       });
 
       returningCode = await orm
-        .createQueryBuilder(Code, 'code')
-        .select(['code', 'user.uuid'])
-        .innerJoin('code.user', 'user')
-        .where('code.id = :id', { id: existingCode.id })
+        .createQueryBuilder(Code, 'c')
+        .select(['c', 'user.uuid'])
+        .innerJoin('c.user', 'user')
+        .where('c.id = :id', { id: existingCode.id })
         .getOne();
 
       logger.info({ uuid: user.uuid, type }, `CODE-CTRL.GENERATE: Updating ${type} code`);
@@ -86,7 +86,7 @@ const generate = async (req, res) => {
 /**
  * Validate a security code
  *
- * @method POST
+ * @method PATCH
  * @param {Object} req - HTTP request
  * @param {Object} res - HTTP response
  * @returns {Object} - JSON response
@@ -100,14 +100,14 @@ const validate = async (req, res) => {
     const user = await orm.findOne(User, { uuid });
     const codeType = await orm.findOne(CodeType, { name: type });
     const existingCode = await orm
-      .createQueryBuilder(Code, 'table')
-      .innerJoin('table.user', 'user')
-      .innerJoin('table.codeType', 'codeType')
-      .where('table.user = :id', { id: user.id })
-      .andWhere('table.codeType = :type', { type: codeType.id })
-      .andWhere('table.code = :code', { code: codeId })
-      .andWhere('table.delivered = :delivered', { delivered: true })
-      .andWhere('table.used = :used', { used: false })
+      .createQueryBuilder(Code, 'c')
+      .innerJoin('c.user', 'user')
+      .innerJoin('c.codeType', 'codeType')
+      .where('c.user = :id', { id: user.id })
+      .andWhere('c.codeType = :type', { type: codeType.id })
+      .andWhere('c.code = :code', { code: codeId })
+      .andWhere('c.delivered = :delivered', { delivered: true })
+      .andWhere('c.used = :used', { used: false })
       .getOne();
     const codeExpired = existingCode
       && compareDates(new Date(), existingCode.expiryDate) > -1;
