@@ -1,18 +1,19 @@
 // For better local node_module paths (i.e. require('local-module'))
-require('app-module-path').addPath(__dirname);
+import 'app-module-path/register';
 
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const config = require('config');
-const formatError = require('local-error-handler');
-const { graphqlSchema } = require('./api/graphql/graphql-schema');
-const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
-const logger = require('local-logger');
-const requestLogger = require('middleware/request-logger');
-const healthCheck = require('express-healthcheck');
+import 'reflect-metadata';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import config from 'config';
+import formatError from 'local-error-handler';
+import logger from 'local-logger';
+import requestLogger from 'middleware/request-logger';
+import healthCheck from 'express-healthcheck';
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+import { graphqlSchema } from './api/graphql/graphql-schema';
 
 const app = express();
 const baseUrl = '/api';
@@ -41,17 +42,17 @@ app.use(cors({
 const verifyJwt = require('middleware/verify-jwt');
 
 // Routes
-const mfaRoutes = require('./api/mfa/mfa-routes');
+// const mfaRoutes = require('./api/mfa/mfa-routes');
 const tokenRoutes = require('./api/token/token-routes');
-const authRoutes = require('./api/auth/auth-routes');
-const mailerRoutes = require('./api/mailer/mailer-routes');
-const paymentRoutes = require('./api/payments/payments-routes');
+// const authRoutes = require('./api/auth/auth-routes');
+// const mailerRoutes = require('./api/mailer/mailer-routes');
+// const paymentRoutes = require('./api/payments/payments-routes');
 
-app.use(`${baseUrl}/mfa`, mfaRoutes);
+// app.use(`${baseUrl}/mfa`, mfaRoutes);
 app.use(`${baseUrl}/token`, tokenRoutes);
-app.use(`${baseUrl}/auth`, authRoutes);
-app.use(`${baseUrl}/mailer`, mailerRoutes);
-app.use(`${baseUrl}/payments`, verifyJwt(), paymentRoutes);
+// app.use(`${baseUrl}/auth`, authRoutes);
+// app.use(`${baseUrl}/mailer`, mailerRoutes);
+// app.use(`${baseUrl}/payments`, verifyJwt(), paymentRoutes);
 
 // GraphQL
 app.use(graphqlUrl, verifyJwt(), graphqlExpress(req => ({

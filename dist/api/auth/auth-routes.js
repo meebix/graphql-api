@@ -1,3 +1,5 @@
+'use strict';
+
 const router = require('express').Router();
 const controller = require('./auth-controller');
 
@@ -18,6 +20,7 @@ module.exports = router;
 // Users: uuid, first name, last name, email, password, role_id, confirmed, locked, deleted_at
 // Roles: name
 // Tokens: user_id, type, code, expires
+// Logins: user_id, ip, user_agent
 // Security Q: short_name, question
 // Users_SecQ: user_id, question_id, answer
 

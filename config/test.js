@@ -1,7 +1,9 @@
-const db = require('../knexfile');
+const database = require('../ormconfig');
 
 module.exports = {
-  database: db.test,
+  database: Object.assign({}, database, {
+    database: 'node_api_test',
+  }),
   server: {
     port: 9000,
   },

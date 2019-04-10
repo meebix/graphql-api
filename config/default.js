@@ -1,7 +1,7 @@
-const db = require('../knexfile');
+const database = require('../ormconfig');
 
 module.exports = {
-  database: db.development,
+  database,
   server: {
     port: process.env.PORT || 8080,
     docs: true,

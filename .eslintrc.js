@@ -3,6 +3,7 @@ module.exports = {
   "plugins": [
       "import"
   ],
+  "parser": "babel-eslint",
   "rules": {
     "import/no-extraneous-dependencies": ["error", {"packageDir": "./package.json"}],
     "no-underscore-dangle": ["error",

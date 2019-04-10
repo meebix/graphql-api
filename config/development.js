@@ -1,7 +1,7 @@
-const db = require('../knexfile');
+const database = require('../ormconfig');
 
 module.exports = {
-  database: db.development,
+  database,
   auth: {
     jwt: false,
     verifyAccess: false,

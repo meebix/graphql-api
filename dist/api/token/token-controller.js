@@ -1,4 +1,17 @@
-import config from 'config';
+'use strict';
+
+var _config = require('config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _typeorm = require('typeorm');
+
+var _User = require('../../entities/User');
+
+var _User2 = _interopRequireDefault(_User);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // const logger = require('local-logger');
 // const formatError = require('local-error-handler');
 // const ApiError = require('local-api-error');
@@ -6,28 +19,24 @@ import config from 'config';
 // const generateToken = require('local-generate-token');
 // const addMinutes = require('date-fns/add_minutes');
 
-import { createConnection } from 'typeorm';
-import User from '../../entities/User';
-
-
 const something = async (req, res) => {
-  console.log('XX', config.database);
+  console.log('XX', _config2.default.database);
   let connection;
   let newUser;
 
   try {
-    connection = await createConnection(config.database);
+    connection = await (0, _typeorm.createConnection)(_config2.default.database);
   } catch (error) {
     console.log('ERR X', error);
   }
   const user = {
     uuid: 'b4af1348-d018-4b1a-846d-0ec0e97607d0d',
     email: 'jon@mail.com',
-    password: 'welcome123',
+    password: 'welcome123'
   };
   console.log('FKJDLKS', connection);
   try {
-    newUser = await connection.getRepository(User).save(user);
+    newUser = await connection.getRepository(_User2.default).save(user);
     return res.send(newUser);
   } catch (error) {
     console.log('ERR 2', error);
@@ -119,7 +128,7 @@ const something = async (req, res) => {
 // };
 
 module.exports = {
-  something,
+  something
   // create,
   // find,
 };
