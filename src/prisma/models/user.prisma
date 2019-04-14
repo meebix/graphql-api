@@ -1,0 +1,28 @@
+type User {
+  id: ID! @unique
+  role: Role!
+  userAccount: UserAccount!
+  firstName: String
+  lastName: String
+  email: String! @unique
+  password: String!
+  phoneCountryCode: String
+  phone: String
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  deletedAt: DateTime
+}
+
+type UserAccount {
+  id: ID! @unique
+  user: User!
+  confirmed: Boolean! @default(value: "false")
+  confirmedToken: String @unique
+  confirmedExpires: String
+  locked: Boolean! @default(value: "false")
+  lockedToken: String @unique
+  lockedExpires: String
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  deletedAt: DateTime
+}

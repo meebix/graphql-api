@@ -1,11 +1,7 @@
 {
   "restartable": "rs",
-  "ignoreRoot": [
-    ".git"
-  ],
+  "ignoreRoot": [".git"],
   "verbose": true,
-  "watch": [
-    "src/"
-  ],
-  "ext": "js json"
+  "watch": ["src/"],
+  "ext": "ts json"
 }

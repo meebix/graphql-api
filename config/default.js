@@ -1,12 +1,24 @@
-const ormConfig = require('../ormconfig');
-
 module.exports = {
   port: process.env.PORT || 8080,
-  orm: ormConfig,
+  graphql: {
+    path: '/api',
+    playground: false,
+    debug: false,
+    logger: false,
+  },
   auth: {
+    enable: true,
     jwt: {
       secret: process.env.JWT_SECRET,
       expireTime: '1h',
+    },
+    tokens: {
+      passwordReset: {
+        expireTime: 2, // time in hours
+      },
+      confirmed: {
+        expireTime: 2, // time in hours
+      },
     },
     verifyAccess: true,
     confirmable: true,
@@ -29,9 +41,10 @@ module.exports = {
   },
   mailer: {
     domain: 'makeitcount.cc',
+    sendEmails: true,
   },
-  graphql: {
-    docs: true,
-    debug: true,
+  logger: {
+    enable: true,
+    pretty: false,
   },
 };
