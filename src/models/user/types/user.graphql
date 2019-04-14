@@ -1,0 +1,28 @@
+type User {
+  id: ID!
+  role: Role!
+  account: UserAccount!
+  firstName: String
+  lastName: String
+  email: String!
+  password: String!
+  phoneCountryCode: String
+  phone: String
+  updatedAt: String!
+  createdAt: String!
+  deletedAt: String
+}
+
+type UserAccount {
+  id: ID!
+  user: User!
+  confirmed: Boolean!
+  confirmedToken: String
+  confirmedExpires: String
+  locked: Boolean!
+  lockedToken: String
+  lockedExpires: String
+  updatedAt: String!
+  createdAt: String!
+  deletedAt: String
+}

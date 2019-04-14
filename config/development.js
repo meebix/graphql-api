@@ -1,16 +1,32 @@
 module.exports = {
-  port: process.env.PORT || 8080,
+  graphql: {
+    playground: true,
+    debug: true,
+    logger: true,
+  },
   auth: {
-    // jwt: false,
+    enable: false,
     verifyAccess: false,
   },
   contentSecurityPolicy: {
-    // These are for the graphiql interface at /api/docs
     defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'unpkg.com', 'cdn.jsdelivr.net'],
-    styleSrc: ["'self'", "'unsafe-inline'", 'unpkg.com'],
+    scriptSrc: [
+      "'self'",
+      "'unsafe-inline'",
+      "'unsafe-eval'",
+      'cdn.jsdelivr.net',
+    ],
+    styleSrc: ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
     fontSrc: ["'self'", 'data:'],
-    imgSrc: ["'self'", 'data:'],
+    imgSrc: [
+      "'self'",
+      'data:',
+      'cdn.jsdelivr.net',
+      'graphcool-playground.netlify.com',
+    ],
+  },
+  mailer: {
+    sendEmails: false,
   },
   mfa: {
     enableEmails: true,
@@ -19,5 +35,6 @@ module.exports = {
   },
   logger: {
     level: 'debug',
+    pretty: true,
   },
 };
