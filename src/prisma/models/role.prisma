@@ -1,6 +1,6 @@
 type Role {
   id: ID! @unique
-  name: RoleName!
+  name: RoleName! @unique
 }
 
 # Enums

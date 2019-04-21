@@ -1,10 +1,10 @@
 import logger from '@modules/logger';
 
 /**
- * Logs key information on every request
+ * Logs key information on every express request
  *
  * @function
- * @returns {String} - Log line
+ * @returns {Function} - Express next middleware promise
  */
 const requestLogger = () => {
   return (req, res, next) => {

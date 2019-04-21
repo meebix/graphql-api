@@ -15,6 +15,10 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 
 export interface Exists {
   role: (where?: RoleWhereInput) => Promise<boolean>;
+  securityQuestion: (where?: SecurityQuestionWhereInput) => Promise<boolean>;
+  securityQuestionAnswer: (
+    where?: SecurityQuestionAnswerWhereInput
+  ) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
   userAccount: (where?: UserAccountWhereInput) => Promise<boolean>;
 }
@@ -61,6 +65,56 @@ export interface Prisma {
       last?: Int;
     }
   ) => RoleConnectionPromise;
+  securityQuestion: (
+    where: SecurityQuestionWhereUniqueInput
+  ) => SecurityQuestionPromise;
+  securityQuestions: (
+    args?: {
+      where?: SecurityQuestionWhereInput;
+      orderBy?: SecurityQuestionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<SecurityQuestion>;
+  securityQuestionsConnection: (
+    args?: {
+      where?: SecurityQuestionWhereInput;
+      orderBy?: SecurityQuestionOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => SecurityQuestionConnectionPromise;
+  securityQuestionAnswer: (
+    where: SecurityQuestionAnswerWhereUniqueInput
+  ) => SecurityQuestionAnswerPromise;
+  securityQuestionAnswers: (
+    args?: {
+      where?: SecurityQuestionAnswerWhereInput;
+      orderBy?: SecurityQuestionAnswerOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<SecurityQuestionAnswer>;
+  securityQuestionAnswersConnection: (
+    args?: {
+      where?: SecurityQuestionAnswerWhereInput;
+      orderBy?: SecurityQuestionAnswerOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => SecurityQuestionAnswerConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserPromise;
   users: (
     args?: {
@@ -129,6 +183,62 @@ export interface Prisma {
   ) => RolePromise;
   deleteRole: (where: RoleWhereUniqueInput) => RolePromise;
   deleteManyRoles: (where?: RoleWhereInput) => BatchPayloadPromise;
+  createSecurityQuestion: (
+    data: SecurityQuestionCreateInput
+  ) => SecurityQuestionPromise;
+  updateSecurityQuestion: (
+    args: {
+      data: SecurityQuestionUpdateInput;
+      where: SecurityQuestionWhereUniqueInput;
+    }
+  ) => SecurityQuestionPromise;
+  updateManySecurityQuestions: (
+    args: {
+      data: SecurityQuestionUpdateManyMutationInput;
+      where?: SecurityQuestionWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertSecurityQuestion: (
+    args: {
+      where: SecurityQuestionWhereUniqueInput;
+      create: SecurityQuestionCreateInput;
+      update: SecurityQuestionUpdateInput;
+    }
+  ) => SecurityQuestionPromise;
+  deleteSecurityQuestion: (
+    where: SecurityQuestionWhereUniqueInput
+  ) => SecurityQuestionPromise;
+  deleteManySecurityQuestions: (
+    where?: SecurityQuestionWhereInput
+  ) => BatchPayloadPromise;
+  createSecurityQuestionAnswer: (
+    data: SecurityQuestionAnswerCreateInput
+  ) => SecurityQuestionAnswerPromise;
+  updateSecurityQuestionAnswer: (
+    args: {
+      data: SecurityQuestionAnswerUpdateInput;
+      where: SecurityQuestionAnswerWhereUniqueInput;
+    }
+  ) => SecurityQuestionAnswerPromise;
+  updateManySecurityQuestionAnswers: (
+    args: {
+      data: SecurityQuestionAnswerUpdateManyMutationInput;
+      where?: SecurityQuestionAnswerWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertSecurityQuestionAnswer: (
+    args: {
+      where: SecurityQuestionAnswerWhereUniqueInput;
+      create: SecurityQuestionAnswerCreateInput;
+      update: SecurityQuestionAnswerUpdateInput;
+    }
+  ) => SecurityQuestionAnswerPromise;
+  deleteSecurityQuestionAnswer: (
+    where: SecurityQuestionAnswerWhereUniqueInput
+  ) => SecurityQuestionAnswerPromise;
+  deleteManySecurityQuestionAnswers: (
+    where?: SecurityQuestionAnswerWhereInput
+  ) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (
     args: { data: UserUpdateInput; where: UserWhereUniqueInput }
@@ -178,6 +288,12 @@ export interface Subscription {
   role: (
     where?: RoleSubscriptionWhereInput
   ) => RoleSubscriptionPayloadSubscription;
+  securityQuestion: (
+    where?: SecurityQuestionSubscriptionWhereInput
+  ) => SecurityQuestionSubscriptionPayloadSubscription;
+  securityQuestionAnswer: (
+    where?: SecurityQuestionAnswerSubscriptionWhereInput
+  ) => SecurityQuestionAnswerSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -194,7 +310,27 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type MutationType = 'CREATED' | 'UPDATED' | 'DELETED';
+export type SecurityQuestionOrderByInput =
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'shortName_ASC'
+  | 'shortName_DESC'
+  | 'question_ASC'
+  | 'question_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC';
+
+export type SecurityQuestionAnswerOrderByInput =
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'answer_ASC'
+  | 'answer_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC';
 
 export type UserOrderByInput =
   | 'id_ASC'
@@ -233,16 +369,28 @@ export type UserAccountOrderByInput =
   | 'id_DESC'
   | 'confirmed_ASC'
   | 'confirmed_DESC'
-  | 'confirmedToken_ASC'
-  | 'confirmedToken_DESC'
+  | 'confirmedCode_ASC'
+  | 'confirmedCode_DESC'
   | 'confirmedExpires_ASC'
   | 'confirmedExpires_DESC'
   | 'locked_ASC'
   | 'locked_DESC'
-  | 'lockedToken_ASC'
-  | 'lockedToken_DESC'
+  | 'lockedCode_ASC'
+  | 'lockedCode_DESC'
   | 'lockedExpires_ASC'
   | 'lockedExpires_DESC'
+  | 'resetPasswordCode_ASC'
+  | 'resetPasswordCode_DESC'
+  | 'resetPasswordExpires_ASC'
+  | 'resetPasswordExpires_DESC'
+  | 'loginAttempts_ASC'
+  | 'loginAttempts_DESC'
+  | 'securityQuestionAttempts_ASC'
+  | 'securityQuestionAttempts_DESC'
+  | 'lastVisit_ASC'
+  | 'lastVisit_DESC'
+  | 'ip_ASC'
+  | 'ip_DESC'
   | 'updatedAt_ASC'
   | 'updatedAt_DESC'
   | 'createdAt_ASC'
@@ -250,22 +398,140 @@ export type UserAccountOrderByInput =
   | 'deletedAt_ASC'
   | 'deletedAt_DESC';
 
+export type MutationType = 'CREATED' | 'UPDATED' | 'DELETED';
+
 export type RoleName = 'USER';
 
-export interface UserAccountCreateInput {
-  user: UserCreateOneWithoutUserAccountInput;
+export interface UserCreateOneWithoutUserAccountInput {
+  create?: UserCreateWithoutUserAccountInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export type RoleWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  name?: RoleName;
+}>;
+
+export interface SecurityQuestionAnswerCreateWithoutUserAccountInput {
+  userSecurityQuestion: SecurityQuestionCreateOneInput;
+  answer: String;
+}
+
+export interface SecurityQuestionUpsertNestedInput {
+  update: SecurityQuestionUpdateDataInput;
+  create: SecurityQuestionCreateInput;
+}
+
+export interface SecurityQuestionAnswerCreateManyWithoutUserAccountInput {
+  create?:
+    | SecurityQuestionAnswerCreateWithoutUserAccountInput[]
+    | SecurityQuestionAnswerCreateWithoutUserAccountInput;
+  connect?:
+    | SecurityQuestionAnswerWhereUniqueInput[]
+    | SecurityQuestionAnswerWhereUniqueInput;
+}
+
+export interface SecurityQuestionAnswerUpdateInput {
+  userAccount?: UserAccountUpdateOneRequiredWithoutSecurityQuestionsInput;
+  userSecurityQuestion?: SecurityQuestionUpdateOneRequiredInput;
+  answer?: String;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface SecurityQuestionAnswerSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SecurityQuestionAnswerWhereInput;
+  AND?:
+    | SecurityQuestionAnswerSubscriptionWhereInput[]
+    | SecurityQuestionAnswerSubscriptionWhereInput;
+  OR?:
+    | SecurityQuestionAnswerSubscriptionWhereInput[]
+    | SecurityQuestionAnswerSubscriptionWhereInput;
+  NOT?:
+    | SecurityQuestionAnswerSubscriptionWhereInput[]
+    | SecurityQuestionAnswerSubscriptionWhereInput;
+}
+
+export interface RoleCreateInput {
+  name: RoleName;
+}
+
+export interface SecurityQuestionSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: SecurityQuestionWhereInput;
+  AND?:
+    | SecurityQuestionSubscriptionWhereInput[]
+    | SecurityQuestionSubscriptionWhereInput;
+  OR?:
+    | SecurityQuestionSubscriptionWhereInput[]
+    | SecurityQuestionSubscriptionWhereInput;
+  NOT?:
+    | SecurityQuestionSubscriptionWhereInput[]
+    | SecurityQuestionSubscriptionWhereInput;
+}
+
+export interface RoleUpdateInput {
+  name?: RoleName;
+}
+
+export interface UserAccountUpdateManyMutationInput {
   confirmed?: Boolean;
-  confirmedToken?: String;
+  confirmedCode?: Int;
   confirmedExpires?: String;
   locked?: Boolean;
-  lockedToken?: String;
+  lockedCode?: Int;
   lockedExpires?: String;
+  resetPasswordCode?: Int;
+  resetPasswordExpires?: String;
+  loginAttempts?: Int;
+  securityQuestionAttempts?: Int;
+  lastVisit?: DateTimeInput;
+  ip?: String;
   deletedAt?: DateTimeInput;
 }
 
-export interface UserUpdateInput {
-  role?: RoleUpdateOneRequiredInput;
-  userAccount?: UserAccountUpdateOneRequiredWithoutUserInput;
+export interface RoleUpdateManyMutationInput {
+  name?: RoleName;
+}
+
+export type SecurityQuestionAnswerWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserAccountCreateWithoutUserInput {
+  confirmed?: Boolean;
+  confirmedCode?: Int;
+  confirmedExpires?: String;
+  locked?: Boolean;
+  lockedCode?: Int;
+  lockedExpires?: String;
+  resetPasswordCode?: Int;
+  resetPasswordExpires?: String;
+  securityQuestions?: SecurityQuestionAnswerCreateManyWithoutUserAccountInput;
+  loginAttempts?: Int;
+  securityQuestionAttempts?: Int;
+  lastVisit?: DateTimeInput;
+  ip?: String;
+  deletedAt?: DateTimeInput;
+}
+
+export interface UserUpdateManyMutationInput {
   firstName?: String;
   lastName?: String;
   email?: String;
@@ -275,99 +541,18 @@ export interface UserUpdateInput {
   deletedAt?: DateTimeInput;
 }
 
-export type UserAccountWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  confirmedToken?: String;
-  lockedToken?: String;
-}>;
-
-export type RoleWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface RoleWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  name?: RoleName;
-  name_not?: RoleName;
-  name_in?: RoleName[] | RoleName;
-  name_not_in?: RoleName[] | RoleName;
-  AND?: RoleWhereInput[] | RoleWhereInput;
-  OR?: RoleWhereInput[] | RoleWhereInput;
-  NOT?: RoleWhereInput[] | RoleWhereInput;
-}
-
-export interface RoleSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: RoleWhereInput;
-  AND?: RoleSubscriptionWhereInput[] | RoleSubscriptionWhereInput;
-  OR?: RoleSubscriptionWhereInput[] | RoleSubscriptionWhereInput;
-  NOT?: RoleSubscriptionWhereInput[] | RoleSubscriptionWhereInput;
-}
-
-export interface UserAccountUpdateWithoutUserDataInput {
-  confirmed?: Boolean;
-  confirmedToken?: String;
-  confirmedExpires?: String;
-  locked?: Boolean;
-  lockedToken?: String;
-  lockedExpires?: String;
-  deletedAt?: DateTimeInput;
-}
-
-export interface UserUpsertWithoutUserAccountInput {
-  update: UserUpdateWithoutUserAccountDataInput;
-  create: UserCreateWithoutUserAccountInput;
-}
-
-export interface UserAccountUpdateOneRequiredWithoutUserInput {
+export interface UserAccountCreateOneWithoutUserInput {
   create?: UserAccountCreateWithoutUserInput;
-  update?: UserAccountUpdateWithoutUserDataInput;
-  upsert?: UserAccountUpsertWithoutUserInput;
   connect?: UserAccountWhereUniqueInput;
 }
 
-export interface UserUpdateOneRequiredWithoutUserAccountInput {
-  create?: UserCreateWithoutUserAccountInput;
-  update?: UserUpdateWithoutUserAccountDataInput;
-  upsert?: UserUpsertWithoutUserAccountInput;
-  connect?: UserWhereUniqueInput;
+export interface SecurityQuestionAnswerUpdateManyDataInput {
+  answer?: String;
 }
 
-export interface RoleUpsertNestedInput {
-  update: RoleUpdateDataInput;
-  create: RoleCreateInput;
-}
-
-export interface UserAccountUpdateInput {
-  user?: UserUpdateOneRequiredWithoutUserAccountInput;
-  confirmed?: Boolean;
-  confirmedToken?: String;
-  confirmedExpires?: String;
-  locked?: Boolean;
-  lockedToken?: String;
-  lockedExpires?: String;
-  deletedAt?: DateTimeInput;
-}
-
-export interface UserCreateOneWithoutUserAccountInput {
-  create?: UserCreateWithoutUserAccountInput;
-  connect?: UserWhereUniqueInput;
+export interface SecurityQuestionCreateInput {
+  shortName: String;
+  question: String;
 }
 
 export interface UserAccountWhereInput {
@@ -388,20 +573,14 @@ export interface UserAccountWhereInput {
   user?: UserWhereInput;
   confirmed?: Boolean;
   confirmed_not?: Boolean;
-  confirmedToken?: String;
-  confirmedToken_not?: String;
-  confirmedToken_in?: String[] | String;
-  confirmedToken_not_in?: String[] | String;
-  confirmedToken_lt?: String;
-  confirmedToken_lte?: String;
-  confirmedToken_gt?: String;
-  confirmedToken_gte?: String;
-  confirmedToken_contains?: String;
-  confirmedToken_not_contains?: String;
-  confirmedToken_starts_with?: String;
-  confirmedToken_not_starts_with?: String;
-  confirmedToken_ends_with?: String;
-  confirmedToken_not_ends_with?: String;
+  confirmedCode?: Int;
+  confirmedCode_not?: Int;
+  confirmedCode_in?: Int[] | Int;
+  confirmedCode_not_in?: Int[] | Int;
+  confirmedCode_lt?: Int;
+  confirmedCode_lte?: Int;
+  confirmedCode_gt?: Int;
+  confirmedCode_gte?: Int;
   confirmedExpires?: String;
   confirmedExpires_not?: String;
   confirmedExpires_in?: String[] | String;
@@ -418,20 +597,14 @@ export interface UserAccountWhereInput {
   confirmedExpires_not_ends_with?: String;
   locked?: Boolean;
   locked_not?: Boolean;
-  lockedToken?: String;
-  lockedToken_not?: String;
-  lockedToken_in?: String[] | String;
-  lockedToken_not_in?: String[] | String;
-  lockedToken_lt?: String;
-  lockedToken_lte?: String;
-  lockedToken_gt?: String;
-  lockedToken_gte?: String;
-  lockedToken_contains?: String;
-  lockedToken_not_contains?: String;
-  lockedToken_starts_with?: String;
-  lockedToken_not_starts_with?: String;
-  lockedToken_ends_with?: String;
-  lockedToken_not_ends_with?: String;
+  lockedCode?: Int;
+  lockedCode_not?: Int;
+  lockedCode_in?: Int[] | Int;
+  lockedCode_not_in?: Int[] | Int;
+  lockedCode_lt?: Int;
+  lockedCode_lte?: Int;
+  lockedCode_gt?: Int;
+  lockedCode_gte?: Int;
   lockedExpires?: String;
   lockedExpires_not?: String;
   lockedExpires_in?: String[] | String;
@@ -446,6 +619,69 @@ export interface UserAccountWhereInput {
   lockedExpires_not_starts_with?: String;
   lockedExpires_ends_with?: String;
   lockedExpires_not_ends_with?: String;
+  resetPasswordCode?: Int;
+  resetPasswordCode_not?: Int;
+  resetPasswordCode_in?: Int[] | Int;
+  resetPasswordCode_not_in?: Int[] | Int;
+  resetPasswordCode_lt?: Int;
+  resetPasswordCode_lte?: Int;
+  resetPasswordCode_gt?: Int;
+  resetPasswordCode_gte?: Int;
+  resetPasswordExpires?: String;
+  resetPasswordExpires_not?: String;
+  resetPasswordExpires_in?: String[] | String;
+  resetPasswordExpires_not_in?: String[] | String;
+  resetPasswordExpires_lt?: String;
+  resetPasswordExpires_lte?: String;
+  resetPasswordExpires_gt?: String;
+  resetPasswordExpires_gte?: String;
+  resetPasswordExpires_contains?: String;
+  resetPasswordExpires_not_contains?: String;
+  resetPasswordExpires_starts_with?: String;
+  resetPasswordExpires_not_starts_with?: String;
+  resetPasswordExpires_ends_with?: String;
+  resetPasswordExpires_not_ends_with?: String;
+  securityQuestions_every?: SecurityQuestionAnswerWhereInput;
+  securityQuestions_some?: SecurityQuestionAnswerWhereInput;
+  securityQuestions_none?: SecurityQuestionAnswerWhereInput;
+  loginAttempts?: Int;
+  loginAttempts_not?: Int;
+  loginAttempts_in?: Int[] | Int;
+  loginAttempts_not_in?: Int[] | Int;
+  loginAttempts_lt?: Int;
+  loginAttempts_lte?: Int;
+  loginAttempts_gt?: Int;
+  loginAttempts_gte?: Int;
+  securityQuestionAttempts?: Int;
+  securityQuestionAttempts_not?: Int;
+  securityQuestionAttempts_in?: Int[] | Int;
+  securityQuestionAttempts_not_in?: Int[] | Int;
+  securityQuestionAttempts_lt?: Int;
+  securityQuestionAttempts_lte?: Int;
+  securityQuestionAttempts_gt?: Int;
+  securityQuestionAttempts_gte?: Int;
+  lastVisit?: DateTimeInput;
+  lastVisit_not?: DateTimeInput;
+  lastVisit_in?: DateTimeInput[] | DateTimeInput;
+  lastVisit_not_in?: DateTimeInput[] | DateTimeInput;
+  lastVisit_lt?: DateTimeInput;
+  lastVisit_lte?: DateTimeInput;
+  lastVisit_gt?: DateTimeInput;
+  lastVisit_gte?: DateTimeInput;
+  ip?: String;
+  ip_not?: String;
+  ip_in?: String[] | String;
+  ip_not_in?: String[] | String;
+  ip_lt?: String;
+  ip_lte?: String;
+  ip_gt?: String;
+  ip_gte?: String;
+  ip_contains?: String;
+  ip_not_contains?: String;
+  ip_starts_with?: String;
+  ip_not_starts_with?: String;
+  ip_ends_with?: String;
+  ip_not_ends_with?: String;
   updatedAt?: DateTimeInput;
   updatedAt_not?: DateTimeInput;
   updatedAt_in?: DateTimeInput[] | DateTimeInput;
@@ -475,96 +711,95 @@ export interface UserAccountWhereInput {
   NOT?: UserAccountWhereInput[] | UserAccountWhereInput;
 }
 
-export interface RoleCreateInput {
-  name: RoleName;
+export interface SecurityQuestionUpdateInput {
+  shortName?: String;
+  question?: String;
 }
 
-export interface UserAccountSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserAccountWhereInput;
-  AND?: UserAccountSubscriptionWhereInput[] | UserAccountSubscriptionWhereInput;
-  OR?: UserAccountSubscriptionWhereInput[] | UserAccountSubscriptionWhereInput;
-  NOT?: UserAccountSubscriptionWhereInput[] | UserAccountSubscriptionWhereInput;
+export interface SecurityQuestionAnswerUpdateManyWithWhereNestedInput {
+  where: SecurityQuestionAnswerScalarWhereInput;
+  data: SecurityQuestionAnswerUpdateManyDataInput;
 }
 
-export interface RoleUpdateInput {
-  name?: RoleName;
+export interface SecurityQuestionUpdateManyMutationInput {
+  shortName?: String;
+  question?: String;
 }
 
-export interface UserAccountUpsertWithoutUserInput {
-  update: UserAccountUpdateWithoutUserDataInput;
-  create: UserAccountCreateWithoutUserInput;
+export interface SecurityQuestionAnswerUpsertWithWhereUniqueWithoutUserAccountInput {
+  where: SecurityQuestionAnswerWhereUniqueInput;
+  update: SecurityQuestionAnswerUpdateWithoutUserAccountDataInput;
+  create: SecurityQuestionAnswerCreateWithoutUserAccountInput;
 }
 
-export interface RoleUpdateManyMutationInput {
-  name?: RoleName;
+export interface SecurityQuestionAnswerCreateInput {
+  userAccount: UserAccountCreateOneWithoutSecurityQuestionsInput;
+  userSecurityQuestion: SecurityQuestionCreateOneInput;
+  answer: String;
 }
 
-export interface UserUpdateWithoutUserAccountDataInput {
-  role?: RoleUpdateOneRequiredInput;
-  firstName?: String;
-  lastName?: String;
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
   email?: String;
-  password?: String;
-  phoneCountryCode?: String;
-  phone?: String;
-  deletedAt?: DateTimeInput;
-}
+}>;
 
-export interface RoleUpdateDataInput {
-  name?: RoleName;
-}
-
-export interface UserCreateWithoutUserAccountInput {
-  role: RoleCreateOneInput;
-  firstName?: String;
-  lastName?: String;
-  email: String;
-  password: String;
-  phoneCountryCode?: String;
-  phone?: String;
-  deletedAt?: DateTimeInput;
-}
-
-export interface RoleUpdateOneRequiredInput {
-  create?: RoleCreateInput;
-  update?: RoleUpdateDataInput;
-  upsert?: RoleUpsertNestedInput;
-  connect?: RoleWhereUniqueInput;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export interface UserAccountCreateWithoutUserInput {
-  confirmed?: Boolean;
-  confirmedToken?: String;
-  confirmedExpires?: String;
-  locked?: Boolean;
-  lockedToken?: String;
-  lockedExpires?: String;
-  deletedAt?: DateTimeInput;
-}
-
-export interface UserAccountCreateOneWithoutUserInput {
-  create?: UserAccountCreateWithoutUserInput;
+export interface UserAccountCreateOneWithoutSecurityQuestionsInput {
+  create?: UserAccountCreateWithoutSecurityQuestionsInput;
   connect?: UserAccountWhereUniqueInput;
 }
 
-export interface RoleCreateOneInput {
-  create?: RoleCreateInput;
-  connect?: RoleWhereUniqueInput;
+export interface SecurityQuestionAnswerUpdateManyWithoutUserAccountInput {
+  create?:
+    | SecurityQuestionAnswerCreateWithoutUserAccountInput[]
+    | SecurityQuestionAnswerCreateWithoutUserAccountInput;
+  delete?:
+    | SecurityQuestionAnswerWhereUniqueInput[]
+    | SecurityQuestionAnswerWhereUniqueInput;
+  connect?:
+    | SecurityQuestionAnswerWhereUniqueInput[]
+    | SecurityQuestionAnswerWhereUniqueInput;
+  set?:
+    | SecurityQuestionAnswerWhereUniqueInput[]
+    | SecurityQuestionAnswerWhereUniqueInput;
+  disconnect?:
+    | SecurityQuestionAnswerWhereUniqueInput[]
+    | SecurityQuestionAnswerWhereUniqueInput;
+  update?:
+    | SecurityQuestionAnswerUpdateWithWhereUniqueWithoutUserAccountInput[]
+    | SecurityQuestionAnswerUpdateWithWhereUniqueWithoutUserAccountInput;
+  upsert?:
+    | SecurityQuestionAnswerUpsertWithWhereUniqueWithoutUserAccountInput[]
+    | SecurityQuestionAnswerUpsertWithWhereUniqueWithoutUserAccountInput;
+  deleteMany?:
+    | SecurityQuestionAnswerScalarWhereInput[]
+    | SecurityQuestionAnswerScalarWhereInput;
+  updateMany?:
+    | SecurityQuestionAnswerUpdateManyWithWhereNestedInput[]
+    | SecurityQuestionAnswerUpdateManyWithWhereNestedInput;
+}
+
+export interface UserAccountCreateWithoutSecurityQuestionsInput {
+  user: UserCreateOneWithoutUserAccountInput;
+  confirmed?: Boolean;
+  confirmedCode?: Int;
+  confirmedExpires?: String;
+  locked?: Boolean;
+  lockedCode?: Int;
+  lockedExpires?: String;
+  resetPasswordCode?: Int;
+  resetPasswordExpires?: String;
+  loginAttempts?: Int;
+  securityQuestionAttempts?: Int;
+  lastVisit?: DateTimeInput;
+  ip?: String;
+  deletedAt?: DateTimeInput;
+}
+
+export interface UserAccountUpdateOneRequiredWithoutUserInput {
+  create?: UserAccountCreateWithoutUserInput;
+  update?: UserAccountUpdateWithoutUserDataInput;
+  upsert?: UserAccountUpsertWithoutUserInput;
+  connect?: UserAccountWhereUniqueInput;
 }
 
 export interface UserCreateInput {
@@ -579,14 +814,142 @@ export interface UserCreateInput {
   deletedAt?: DateTimeInput;
 }
 
-export interface UserUpdateManyMutationInput {
+export interface RoleWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  name?: RoleName;
+  name_not?: RoleName;
+  name_in?: RoleName[] | RoleName;
+  name_not_in?: RoleName[] | RoleName;
+  AND?: RoleWhereInput[] | RoleWhereInput;
+  OR?: RoleWhereInput[] | RoleWhereInput;
+  NOT?: RoleWhereInput[] | RoleWhereInput;
+}
+
+export interface UserCreateWithoutUserAccountInput {
+  role: RoleCreateOneInput;
   firstName?: String;
   lastName?: String;
-  email?: String;
-  password?: String;
+  email: String;
+  password: String;
   phoneCountryCode?: String;
   phone?: String;
   deletedAt?: DateTimeInput;
+}
+
+export interface UserAccountSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserAccountWhereInput;
+  AND?: UserAccountSubscriptionWhereInput[] | UserAccountSubscriptionWhereInput;
+  OR?: UserAccountSubscriptionWhereInput[] | UserAccountSubscriptionWhereInput;
+  NOT?: UserAccountSubscriptionWhereInput[] | UserAccountSubscriptionWhereInput;
+}
+
+export interface RoleCreateOneInput {
+  create?: RoleCreateInput;
+  connect?: RoleWhereUniqueInput;
+}
+
+export interface SecurityQuestionWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  shortName?: String;
+  shortName_not?: String;
+  shortName_in?: String[] | String;
+  shortName_not_in?: String[] | String;
+  shortName_lt?: String;
+  shortName_lte?: String;
+  shortName_gt?: String;
+  shortName_gte?: String;
+  shortName_contains?: String;
+  shortName_not_contains?: String;
+  shortName_starts_with?: String;
+  shortName_not_starts_with?: String;
+  shortName_ends_with?: String;
+  shortName_not_ends_with?: String;
+  question?: String;
+  question_not?: String;
+  question_in?: String[] | String;
+  question_not_in?: String[] | String;
+  question_lt?: String;
+  question_lte?: String;
+  question_gt?: String;
+  question_gte?: String;
+  question_contains?: String;
+  question_not_contains?: String;
+  question_starts_with?: String;
+  question_not_starts_with?: String;
+  question_ends_with?: String;
+  question_not_ends_with?: String;
+  AND?: SecurityQuestionWhereInput[] | SecurityQuestionWhereInput;
+  OR?: SecurityQuestionWhereInput[] | SecurityQuestionWhereInput;
+  NOT?: SecurityQuestionWhereInput[] | SecurityQuestionWhereInput;
+}
+
+export interface SecurityQuestionCreateOneInput {
+  create?: SecurityQuestionCreateInput;
+  connect?: SecurityQuestionWhereUniqueInput;
+}
+
+export interface UserAccountUpdateInput {
+  user?: UserUpdateOneRequiredWithoutUserAccountInput;
+  confirmed?: Boolean;
+  confirmedCode?: Int;
+  confirmedExpires?: String;
+  locked?: Boolean;
+  lockedCode?: Int;
+  lockedExpires?: String;
+  resetPasswordCode?: Int;
+  resetPasswordExpires?: String;
+  securityQuestions?: SecurityQuestionAnswerUpdateManyWithoutUserAccountInput;
+  loginAttempts?: Int;
+  securityQuestionAttempts?: Int;
+  lastVisit?: DateTimeInput;
+  ip?: String;
+  deletedAt?: DateTimeInput;
+}
+
+export interface SecurityQuestionAnswerUpdateManyMutationInput {
+  answer?: String;
+}
+
+export interface UserAccountUpsertWithoutUserInput {
+  update: UserAccountUpdateWithoutUserDataInput;
+  create: UserAccountCreateWithoutUserInput;
+}
+
+export interface UserAccountUpdateOneRequiredWithoutSecurityQuestionsInput {
+  create?: UserAccountCreateWithoutSecurityQuestionsInput;
+  update?: UserAccountUpdateWithoutSecurityQuestionsDataInput;
+  upsert?: UserAccountUpsertWithoutSecurityQuestionsInput;
+  connect?: UserAccountWhereUniqueInput;
 }
 
 export interface UserWhereInput {
@@ -719,66 +1082,253 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-}>;
-
-export interface UserAccountUpdateManyMutationInput {
+export interface UserAccountUpdateWithoutSecurityQuestionsDataInput {
+  user?: UserUpdateOneRequiredWithoutUserAccountInput;
   confirmed?: Boolean;
-  confirmedToken?: String;
+  confirmedCode?: Int;
   confirmedExpires?: String;
   locked?: Boolean;
-  lockedToken?: String;
+  lockedCode?: Int;
   lockedExpires?: String;
+  resetPasswordCode?: Int;
+  resetPasswordExpires?: String;
+  loginAttempts?: Int;
+  securityQuestionAttempts?: Int;
+  lastVisit?: DateTimeInput;
+  ip?: String;
   deletedAt?: DateTimeInput;
 }
+
+export interface SecurityQuestionAnswerUpdateWithoutUserAccountDataInput {
+  userSecurityQuestion?: SecurityQuestionUpdateOneRequiredInput;
+  answer?: String;
+}
+
+export interface UserUpdateOneRequiredWithoutUserAccountInput {
+  create?: UserCreateWithoutUserAccountInput;
+  update?: UserUpdateWithoutUserAccountDataInput;
+  upsert?: UserUpsertWithoutUserAccountInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserAccountUpdateWithoutUserDataInput {
+  confirmed?: Boolean;
+  confirmedCode?: Int;
+  confirmedExpires?: String;
+  locked?: Boolean;
+  lockedCode?: Int;
+  lockedExpires?: String;
+  resetPasswordCode?: Int;
+  resetPasswordExpires?: String;
+  securityQuestions?: SecurityQuestionAnswerUpdateManyWithoutUserAccountInput;
+  loginAttempts?: Int;
+  securityQuestionAttempts?: Int;
+  lastVisit?: DateTimeInput;
+  ip?: String;
+  deletedAt?: DateTimeInput;
+}
+
+export interface UserUpdateWithoutUserAccountDataInput {
+  role?: RoleUpdateOneRequiredInput;
+  firstName?: String;
+  lastName?: String;
+  email?: String;
+  password?: String;
+  phoneCountryCode?: String;
+  phone?: String;
+  deletedAt?: DateTimeInput;
+}
+
+export interface UserUpdateInput {
+  role?: RoleUpdateOneRequiredInput;
+  userAccount?: UserAccountUpdateOneRequiredWithoutUserInput;
+  firstName?: String;
+  lastName?: String;
+  email?: String;
+  password?: String;
+  phoneCountryCode?: String;
+  phone?: String;
+  deletedAt?: DateTimeInput;
+}
+
+export interface RoleUpdateOneRequiredInput {
+  create?: RoleCreateInput;
+  update?: RoleUpdateDataInput;
+  upsert?: RoleUpsertNestedInput;
+  connect?: RoleWhereUniqueInput;
+}
+
+export interface RoleSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: RoleWhereInput;
+  AND?: RoleSubscriptionWhereInput[] | RoleSubscriptionWhereInput;
+  OR?: RoleSubscriptionWhereInput[] | RoleSubscriptionWhereInput;
+  NOT?: RoleSubscriptionWhereInput[] | RoleSubscriptionWhereInput;
+}
+
+export interface RoleUpdateDataInput {
+  name?: RoleName;
+}
+
+export interface SecurityQuestionAnswerWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  userAccount?: UserAccountWhereInput;
+  userSecurityQuestion?: SecurityQuestionWhereInput;
+  answer?: String;
+  answer_not?: String;
+  answer_in?: String[] | String;
+  answer_not_in?: String[] | String;
+  answer_lt?: String;
+  answer_lte?: String;
+  answer_gt?: String;
+  answer_gte?: String;
+  answer_contains?: String;
+  answer_not_contains?: String;
+  answer_starts_with?: String;
+  answer_not_starts_with?: String;
+  answer_ends_with?: String;
+  answer_not_ends_with?: String;
+  AND?: SecurityQuestionAnswerWhereInput[] | SecurityQuestionAnswerWhereInput;
+  OR?: SecurityQuestionAnswerWhereInput[] | SecurityQuestionAnswerWhereInput;
+  NOT?: SecurityQuestionAnswerWhereInput[] | SecurityQuestionAnswerWhereInput;
+}
+
+export interface RoleUpsertNestedInput {
+  update: RoleUpdateDataInput;
+  create: RoleCreateInput;
+}
+
+export interface SecurityQuestionAnswerUpdateWithWhereUniqueWithoutUserAccountInput {
+  where: SecurityQuestionAnswerWhereUniqueInput;
+  data: SecurityQuestionAnswerUpdateWithoutUserAccountDataInput;
+}
+
+export interface SecurityQuestionUpdateDataInput {
+  shortName?: String;
+  question?: String;
+}
+
+export interface SecurityQuestionUpdateOneRequiredInput {
+  create?: SecurityQuestionCreateInput;
+  update?: SecurityQuestionUpdateDataInput;
+  upsert?: SecurityQuestionUpsertNestedInput;
+  connect?: SecurityQuestionWhereUniqueInput;
+}
+
+export interface UserAccountUpsertWithoutSecurityQuestionsInput {
+  update: UserAccountUpdateWithoutSecurityQuestionsDataInput;
+  create: UserAccountCreateWithoutSecurityQuestionsInput;
+}
+
+export interface UserUpsertWithoutUserAccountInput {
+  update: UserUpdateWithoutUserAccountDataInput;
+  create: UserCreateWithoutUserAccountInput;
+}
+
+export type UserAccountWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  confirmedCode?: Int;
+  lockedCode?: Int;
+  resetPasswordCode?: Int;
+}>;
+
+export interface SecurityQuestionAnswerScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  answer?: String;
+  answer_not?: String;
+  answer_in?: String[] | String;
+  answer_not_in?: String[] | String;
+  answer_lt?: String;
+  answer_lte?: String;
+  answer_gt?: String;
+  answer_gte?: String;
+  answer_contains?: String;
+  answer_not_contains?: String;
+  answer_starts_with?: String;
+  answer_not_starts_with?: String;
+  answer_ends_with?: String;
+  answer_not_ends_with?: String;
+  AND?:
+    | SecurityQuestionAnswerScalarWhereInput[]
+    | SecurityQuestionAnswerScalarWhereInput;
+  OR?:
+    | SecurityQuestionAnswerScalarWhereInput[]
+    | SecurityQuestionAnswerScalarWhereInput;
+  NOT?:
+    | SecurityQuestionAnswerScalarWhereInput[]
+    | SecurityQuestionAnswerScalarWhereInput;
+}
+
+export interface UserAccountCreateInput {
+  user: UserCreateOneWithoutUserAccountInput;
+  confirmed?: Boolean;
+  confirmedCode?: Int;
+  confirmedExpires?: String;
+  locked?: Boolean;
+  lockedCode?: Int;
+  lockedExpires?: String;
+  resetPasswordCode?: Int;
+  resetPasswordExpires?: String;
+  securityQuestions?: SecurityQuestionAnswerCreateManyWithoutUserAccountInput;
+  loginAttempts?: Int;
+  securityQuestionAttempts?: Int;
+  lastVisit?: DateTimeInput;
+  ip?: String;
+  deletedAt?: DateTimeInput;
+}
+
+export type SecurityQuestionWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  shortName?: String;
+}>;
 
 export interface NodeNode {
   id: ID_Output;
 }
 
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface RoleEdge {
-  node: Role;
-  cursor: String;
-}
-
-export interface RoleEdgePromise extends Promise<RoleEdge>, Fragmentable {
-  node: <T = RolePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface RoleEdgeSubscription
-  extends Promise<AsyncIterator<RoleEdge>>,
-    Fragmentable {
-  node: <T = RoleSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
 export interface UserAccountPreviousValues {
   id: ID_Output;
   confirmed: Boolean;
-  confirmedToken?: String;
+  confirmedCode?: Int;
   confirmedExpires?: String;
   locked: Boolean;
-  lockedToken?: String;
+  lockedCode?: Int;
   lockedExpires?: String;
+  resetPasswordCode?: Int;
+  resetPasswordExpires?: String;
+  loginAttempts: Int;
+  securityQuestionAttempts: Int;
+  lastVisit?: DateTimeOutput;
+  ip?: String;
   updatedAt: DateTimeOutput;
   createdAt: DateTimeOutput;
   deletedAt?: DateTimeOutput;
@@ -789,11 +1339,17 @@ export interface UserAccountPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   confirmed: () => Promise<Boolean>;
-  confirmedToken: () => Promise<String>;
+  confirmedCode: () => Promise<Int>;
   confirmedExpires: () => Promise<String>;
   locked: () => Promise<Boolean>;
-  lockedToken: () => Promise<String>;
+  lockedCode: () => Promise<Int>;
   lockedExpires: () => Promise<String>;
+  resetPasswordCode: () => Promise<Int>;
+  resetPasswordExpires: () => Promise<String>;
+  loginAttempts: () => Promise<Int>;
+  securityQuestionAttempts: () => Promise<Int>;
+  lastVisit: () => Promise<DateTimeOutput>;
+  ip: () => Promise<String>;
   updatedAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
   deletedAt: () => Promise<DateTimeOutput>;
@@ -804,11 +1360,148 @@ export interface UserAccountPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   confirmed: () => Promise<AsyncIterator<Boolean>>;
-  confirmedToken: () => Promise<AsyncIterator<String>>;
+  confirmedCode: () => Promise<AsyncIterator<Int>>;
   confirmedExpires: () => Promise<AsyncIterator<String>>;
   locked: () => Promise<AsyncIterator<Boolean>>;
-  lockedToken: () => Promise<AsyncIterator<String>>;
+  lockedCode: () => Promise<AsyncIterator<Int>>;
   lockedExpires: () => Promise<AsyncIterator<String>>;
+  resetPasswordCode: () => Promise<AsyncIterator<Int>>;
+  resetPasswordExpires: () => Promise<AsyncIterator<String>>;
+  loginAttempts: () => Promise<AsyncIterator<Int>>;
+  securityQuestionAttempts: () => Promise<AsyncIterator<Int>>;
+  lastVisit: () => Promise<AsyncIterator<DateTimeOutput>>;
+  ip: () => Promise<AsyncIterator<String>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  deletedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface SecurityQuestionAnswer {
+  id: ID_Output;
+  answer: String;
+}
+
+export interface SecurityQuestionAnswerPromise
+  extends Promise<SecurityQuestionAnswer>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  userAccount: <T = UserAccountPromise>() => T;
+  userSecurityQuestion: <T = SecurityQuestionPromise>() => T;
+  answer: () => Promise<String>;
+}
+
+export interface SecurityQuestionAnswerSubscription
+  extends Promise<AsyncIterator<SecurityQuestionAnswer>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  userAccount: <T = UserAccountSubscription>() => T;
+  userSecurityQuestion: <T = SecurityQuestionSubscription>() => T;
+  answer: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserAccount {
+  id: ID_Output;
+  confirmed: Boolean;
+  confirmedCode?: Int;
+  confirmedExpires?: String;
+  locked: Boolean;
+  lockedCode?: Int;
+  lockedExpires?: String;
+  resetPasswordCode?: Int;
+  resetPasswordExpires?: String;
+  loginAttempts: Int;
+  securityQuestionAttempts: Int;
+  lastVisit?: DateTimeOutput;
+  ip?: String;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+  deletedAt?: DateTimeOutput;
+}
+
+export interface UserAccountPromise extends Promise<UserAccount>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  user: <T = UserPromise>() => T;
+  confirmed: () => Promise<Boolean>;
+  confirmedCode: () => Promise<Int>;
+  confirmedExpires: () => Promise<String>;
+  locked: () => Promise<Boolean>;
+  lockedCode: () => Promise<Int>;
+  lockedExpires: () => Promise<String>;
+  resetPasswordCode: () => Promise<Int>;
+  resetPasswordExpires: () => Promise<String>;
+  securityQuestions: <T = FragmentableArray<SecurityQuestionAnswer>>(
+    args?: {
+      where?: SecurityQuestionAnswerWhereInput;
+      orderBy?: SecurityQuestionAnswerOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  loginAttempts: () => Promise<Int>;
+  securityQuestionAttempts: () => Promise<Int>;
+  lastVisit: () => Promise<DateTimeOutput>;
+  ip: () => Promise<String>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  deletedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface UserAccountSubscription
+  extends Promise<AsyncIterator<UserAccount>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  user: <T = UserSubscription>() => T;
+  confirmed: () => Promise<AsyncIterator<Boolean>>;
+  confirmedCode: () => Promise<AsyncIterator<Int>>;
+  confirmedExpires: () => Promise<AsyncIterator<String>>;
+  locked: () => Promise<AsyncIterator<Boolean>>;
+  lockedCode: () => Promise<AsyncIterator<Int>>;
+  lockedExpires: () => Promise<AsyncIterator<String>>;
+  resetPasswordCode: () => Promise<AsyncIterator<Int>>;
+  resetPasswordExpires: () => Promise<AsyncIterator<String>>;
+  securityQuestions: <
+    T = Promise<AsyncIterator<SecurityQuestionAnswerSubscription>>
+  >(
+    args?: {
+      where?: SecurityQuestionAnswerWhereInput;
+      orderBy?: SecurityQuestionAnswerOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  loginAttempts: () => Promise<AsyncIterator<Int>>;
+  securityQuestionAttempts: () => Promise<AsyncIterator<Int>>;
+  lastVisit: () => Promise<AsyncIterator<DateTimeOutput>>;
+  ip: () => Promise<AsyncIterator<String>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   deletedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -855,37 +1548,36 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface Role {
-  id: ID_Output;
-  name: RoleName;
-}
-
-export interface RolePromise extends Promise<Role>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<RoleName>;
-}
-
-export interface RoleSubscription
-  extends Promise<AsyncIterator<Role>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<RoleName>>;
-}
-
-export interface AggregateUserAccount {
+export interface AggregateSecurityQuestion {
   count: Int;
 }
 
-export interface AggregateUserAccountPromise
-  extends Promise<AggregateUserAccount>,
+export interface AggregateSecurityQuestionPromise
+  extends Promise<AggregateSecurityQuestion>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateUserAccountSubscription
-  extends Promise<AsyncIterator<AggregateUserAccount>>,
+export interface AggregateSecurityQuestionSubscription
+  extends Promise<AsyncIterator<AggregateSecurityQuestion>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
 }
 
 export interface UserAccountEdge {
@@ -907,6 +1599,25 @@ export interface UserAccountEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
+export interface SecurityQuestionEdge {
+  node: SecurityQuestion;
+  cursor: String;
+}
+
+export interface SecurityQuestionEdgePromise
+  extends Promise<SecurityQuestionEdge>,
+    Fragmentable {
+  node: <T = SecurityQuestionPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SecurityQuestionEdgeSubscription
+  extends Promise<AsyncIterator<SecurityQuestionEdge>>,
+    Fragmentable {
+  node: <T = SecurityQuestionSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
 export interface AggregateUser {
   count: Int;
 }
@@ -923,27 +1634,25 @@ export interface AggregateUserSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
+export interface SecurityQuestionConnection {
+  pageInfo: PageInfo;
+  edges: SecurityQuestionEdge[];
 }
 
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
+export interface SecurityQuestionConnectionPromise
+  extends Promise<SecurityQuestionConnection>,
     Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SecurityQuestionEdge>>() => T;
+  aggregate: <T = AggregateSecurityQuestionPromise>() => T;
+}
+
+export interface SecurityQuestionConnectionSubscription
+  extends Promise<AsyncIterator<SecurityQuestionConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<SecurityQuestionEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateSecurityQuestionSubscription>() => T;
 }
 
 export interface UserConnection {
@@ -967,66 +1676,37 @@ export interface UserConnectionSubscription
   aggregate: <T = AggregateUserSubscription>() => T;
 }
 
-export interface UserAccount {
-  id: ID_Output;
-  confirmed: Boolean;
-  confirmedToken?: String;
-  confirmedExpires?: String;
-  locked: Boolean;
-  lockedToken?: String;
-  lockedExpires?: String;
-  updatedAt: DateTimeOutput;
-  createdAt: DateTimeOutput;
-  deletedAt?: DateTimeOutput;
-}
-
-export interface UserAccountPromise extends Promise<UserAccount>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  user: <T = UserPromise>() => T;
-  confirmed: () => Promise<Boolean>;
-  confirmedToken: () => Promise<String>;
-  confirmedExpires: () => Promise<String>;
-  locked: () => Promise<Boolean>;
-  lockedToken: () => Promise<String>;
-  lockedExpires: () => Promise<String>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  createdAt: () => Promise<DateTimeOutput>;
-  deletedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface UserAccountSubscription
-  extends Promise<AsyncIterator<UserAccount>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  user: <T = UserSubscription>() => T;
-  confirmed: () => Promise<AsyncIterator<Boolean>>;
-  confirmedToken: () => Promise<AsyncIterator<String>>;
-  confirmedExpires: () => Promise<AsyncIterator<String>>;
-  locked: () => Promise<AsyncIterator<Boolean>>;
-  lockedToken: () => Promise<AsyncIterator<String>>;
-  lockedExpires: () => Promise<AsyncIterator<String>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  deletedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface RolePreviousValues {
+export interface Role {
   id: ID_Output;
   name: RoleName;
 }
 
-export interface RolePreviousValuesPromise
-  extends Promise<RolePreviousValues>,
-    Fragmentable {
+export interface RolePromise extends Promise<Role>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<RoleName>;
 }
 
-export interface RolePreviousValuesSubscription
-  extends Promise<AsyncIterator<RolePreviousValues>>,
+export interface RoleSubscription
+  extends Promise<AsyncIterator<Role>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<RoleName>>;
+}
+
+export interface AggregateSecurityQuestionAnswer {
+  count: Int;
+}
+
+export interface AggregateSecurityQuestionAnswerPromise
+  extends Promise<AggregateSecurityQuestionAnswer>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateSecurityQuestionAnswerSubscription
+  extends Promise<AsyncIterator<AggregateSecurityQuestionAnswer>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface RoleSubscriptionPayload {
@@ -1052,6 +1732,48 @@ export interface RoleSubscriptionPayloadSubscription
   node: <T = RoleSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
   previousValues: <T = RolePreviousValuesSubscription>() => T;
+}
+
+export interface SecurityQuestionAnswerConnection {
+  pageInfo: PageInfo;
+  edges: SecurityQuestionAnswerEdge[];
+}
+
+export interface SecurityQuestionAnswerConnectionPromise
+  extends Promise<SecurityQuestionAnswerConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<SecurityQuestionAnswerEdge>>() => T;
+  aggregate: <T = AggregateSecurityQuestionAnswerPromise>() => T;
+}
+
+export interface SecurityQuestionAnswerConnectionSubscription
+  extends Promise<AsyncIterator<SecurityQuestionAnswerConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <
+    T = Promise<AsyncIterator<SecurityQuestionAnswerEdgeSubscription>>
+  >() => T;
+  aggregate: <T = AggregateSecurityQuestionAnswerSubscription>() => T;
+}
+
+export interface RolePreviousValues {
+  id: ID_Output;
+  name: RoleName;
+}
+
+export interface RolePreviousValuesPromise
+  extends Promise<RolePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<RoleName>;
+}
+
+export interface RolePreviousValuesSubscription
+  extends Promise<AsyncIterator<RolePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<RoleName>>;
 }
 
 export interface UserPreviousValues {
@@ -1118,6 +1840,234 @@ export interface RoleConnectionSubscription
   aggregate: <T = AggregateRoleSubscription>() => T;
 }
 
+export interface AggregateUserAccount {
+  count: Int;
+}
+
+export interface AggregateUserAccountPromise
+  extends Promise<AggregateUserAccount>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserAccountSubscription
+  extends Promise<AsyncIterator<AggregateUserAccount>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface SecurityQuestionSubscriptionPayload {
+  mutation: MutationType;
+  node: SecurityQuestion;
+  updatedFields: String[];
+  previousValues: SecurityQuestionPreviousValues;
+}
+
+export interface SecurityQuestionSubscriptionPayloadPromise
+  extends Promise<SecurityQuestionSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SecurityQuestionPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SecurityQuestionPreviousValuesPromise>() => T;
+}
+
+export interface SecurityQuestionSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SecurityQuestionSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SecurityQuestionSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SecurityQuestionPreviousValuesSubscription>() => T;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SecurityQuestionAnswerEdge {
+  node: SecurityQuestionAnswer;
+  cursor: String;
+}
+
+export interface SecurityQuestionAnswerEdgePromise
+  extends Promise<SecurityQuestionAnswerEdge>,
+    Fragmentable {
+  node: <T = SecurityQuestionAnswerPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface SecurityQuestionAnswerEdgeSubscription
+  extends Promise<AsyncIterator<SecurityQuestionAnswerEdge>>,
+    Fragmentable {
+  node: <T = SecurityQuestionAnswerSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SecurityQuestionAnswerPreviousValues {
+  id: ID_Output;
+  answer: String;
+}
+
+export interface SecurityQuestionAnswerPreviousValuesPromise
+  extends Promise<SecurityQuestionAnswerPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  answer: () => Promise<String>;
+}
+
+export interface SecurityQuestionAnswerPreviousValuesSubscription
+  extends Promise<AsyncIterator<SecurityQuestionAnswerPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  answer: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SecurityQuestionAnswerSubscriptionPayload {
+  mutation: MutationType;
+  node: SecurityQuestionAnswer;
+  updatedFields: String[];
+  previousValues: SecurityQuestionAnswerPreviousValues;
+}
+
+export interface SecurityQuestionAnswerSubscriptionPayloadPromise
+  extends Promise<SecurityQuestionAnswerSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = SecurityQuestionAnswerPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = SecurityQuestionAnswerPreviousValuesPromise>() => T;
+}
+
+export interface SecurityQuestionAnswerSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<SecurityQuestionAnswerSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = SecurityQuestionAnswerSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = SecurityQuestionAnswerPreviousValuesSubscription>() => T;
+}
+
+export interface SecurityQuestion {
+  id: ID_Output;
+  shortName: String;
+  question: String;
+}
+
+export interface SecurityQuestionPromise
+  extends Promise<SecurityQuestion>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  shortName: () => Promise<String>;
+  question: () => Promise<String>;
+}
+
+export interface SecurityQuestionSubscription
+  extends Promise<AsyncIterator<SecurityQuestion>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  shortName: () => Promise<AsyncIterator<String>>;
+  question: () => Promise<AsyncIterator<String>>;
+}
+
+export interface SecurityQuestionPreviousValues {
+  id: ID_Output;
+  shortName: String;
+  question: String;
+}
+
+export interface SecurityQuestionPreviousValuesPromise
+  extends Promise<SecurityQuestionPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  shortName: () => Promise<String>;
+  question: () => Promise<String>;
+}
+
+export interface SecurityQuestionPreviousValuesSubscription
+  extends Promise<AsyncIterator<SecurityQuestionPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  shortName: () => Promise<AsyncIterator<String>>;
+  question: () => Promise<AsyncIterator<String>>;
+}
+
+export interface RoleEdge {
+  node: Role;
+  cursor: String;
+}
+
+export interface RoleEdgePromise extends Promise<RoleEdge>, Fragmentable {
+  node: <T = RolePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface RoleEdgeSubscription
+  extends Promise<AsyncIterator<RoleEdge>>,
+    Fragmentable {
+  node: <T = RoleSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserAccountSubscriptionPayload {
+  mutation: MutationType;
+  node: UserAccount;
+  updatedFields: String[];
+  previousValues: UserAccountPreviousValues;
+}
+
+export interface UserAccountSubscriptionPayloadPromise
+  extends Promise<UserAccountSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserAccountPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserAccountPreviousValuesPromise>() => T;
+}
+
+export interface UserAccountSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserAccountSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserAccountSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserAccountPreviousValuesSubscription>() => T;
+}
+
+export interface UserAccountConnection {
+  pageInfo: PageInfo;
+  edges: UserAccountEdge[];
+}
+
+export interface UserAccountConnectionPromise
+  extends Promise<UserAccountConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserAccountEdge>>() => T;
+  aggregate: <T = AggregateUserAccountPromise>() => T;
+}
+
+export interface UserAccountConnectionSubscription
+  extends Promise<AsyncIterator<UserAccountConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserAccountEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserAccountSubscription>() => T;
+}
+
 export interface User {
   id: ID_Output;
   firstName?: String;
@@ -1163,75 +2113,22 @@ export interface UserSubscription
   deletedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface UserAccountSubscriptionPayload {
-  mutation: MutationType;
-  node: UserAccount;
-  updatedFields: String[];
-  previousValues: UserAccountPreviousValues;
-}
-
-export interface UserAccountSubscriptionPayloadPromise
-  extends Promise<UserAccountSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserAccountPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserAccountPreviousValuesPromise>() => T;
-}
-
-export interface UserAccountSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserAccountSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserAccountSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserAccountPreviousValuesSubscription>() => T;
-}
-
-export interface UserEdge {
-  node: User;
-  cursor: String;
-}
-
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserAccountConnection {
-  pageInfo: PageInfo;
-  edges: UserAccountEdge[];
-}
-
-export interface UserAccountConnectionPromise
-  extends Promise<UserAccountConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserAccountEdge>>() => T;
-  aggregate: <T = AggregateUserAccountPromise>() => T;
-}
-
-export interface UserAccountConnectionSubscription
-  extends Promise<AsyncIterator<UserAccountConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserAccountEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserAccountSubscription>() => T;
-}
-
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
 
 export type Long = string;
+
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
+
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string;
 
 /*
 DateTime scalar input type, allowing Date
@@ -1248,16 +2145,6 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 */
 export type ID_Input = string | number;
 export type ID_Output = string;
-
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
-
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
 
 /**
  * Model Metadata
@@ -1278,6 +2165,14 @@ export const models: Model[] = [
   },
   {
     name: 'UserAccount',
+    embedded: false,
+  },
+  {
+    name: 'SecurityQuestion',
+    embedded: false,
+  },
+  {
+    name: 'SecurityQuestionAnswer',
     embedded: false,
   },
 ];

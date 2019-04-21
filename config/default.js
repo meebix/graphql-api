@@ -7,44 +7,37 @@ module.exports = {
     logger: false,
   },
   auth: {
-    enable: true,
+    enabled: true,
+    confirmable: true,
     jwt: {
       secret: process.env.JWT_SECRET,
       expireTime: '1h',
     },
-    tokens: {
-      passwordReset: {
-        expireTime: 2, // time in hours
-      },
-      confirmed: {
-        expireTime: 2, // time in hours
+    codes: {
+      // time in minutes
+      expireTime: {
+        confirmed: 8 * 60,
+        passwordReset: 30,
+        locked: 15,
       },
     },
-    verifyAccess: true,
-    confirmable: true,
     lockable: {
+      enabled: true,
       maxAttempts: 5,
     },
-    securityQuestions: true,
-    code: {
-      expireTime: 30, // minutes
+    securityQuestions: {
+      number: 3,
     },
   },
   contentSecurityPolicy: {
     defaultSrc: ["'self'"],
   },
-  mfa: {
-    enableEmails: true,
-    enableTexts: true,
-    enableCalls: true,
-    codeExpireTime: 15,
-  },
   mailer: {
-    domain: 'makeitcount.cc',
     sendEmails: true,
   },
   logger: {
-    enable: true,
+    enabled: true,
+    level: 'info',
     pretty: false,
   },
 };

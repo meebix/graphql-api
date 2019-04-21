@@ -9,11 +9,16 @@ if (process.env.NODE_ENV !== 'production') {
   destination = pino.destination(1);
 }
 
+/**
+ * Creates a default logger instance
+ *
+ * @returns {Function} - Pino logger instance
+ */
 const defaultLogger = pino(
   {
     name: 'node-graphql',
-    level: config.get('logger.level') || 'info',
-    enable: config.get('logger.enable'),
+    level: config.get('logger.level'),
+    enable: config.get('logger.enabled'),
     redact: {
       paths: [],
       remove: true,
@@ -23,6 +28,11 @@ const defaultLogger = pino(
   destination
 );
 
+/**
+ * Creates a child instance of the default logger
+ *
+ * @returns {Function} - Pino child logger instance
+ */
 const logger = defaultLogger.child({
   serializers: {
     req: req => {
@@ -59,12 +69,13 @@ const logger = defaultLogger.child({
       };
     },
     args: args => {
-      const whitelistArgs = Object.assign({}, args);
+      const whitelistArgs = Object.assign({}, { ...args.input });
 
       delete whitelistArgs.firstName;
       delete whitelistArgs.lastName;
       delete whitelistArgs.email;
       delete whitelistArgs.password;
+      delete whitelistArgs.answers;
 
       return { ...whitelistArgs };
     },
