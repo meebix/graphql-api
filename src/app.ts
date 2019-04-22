@@ -1,6 +1,8 @@
 import express from 'express';
+import path from 'path';
 import { ApolloServer, makeExecutableSchema } from 'apollo-server-express';
 import { applyMiddleware } from 'graphql-middleware';
+import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import config from 'config';
 import helmet from 'helmet';
 import healthCheck from 'express-healthcheck';
@@ -8,11 +10,13 @@ import { prisma } from '@prisma/generated/prisma-client';
 import logger from '@modules/logger';
 import requestLogger from '@middleware/request-logger';
 import resolverLogger from '@middleware/resolver-logger';
-import permissions from '@middleware/permissions';
+import access from '@middleware/access';
 import validations from '@middleware/validations';
 
-// Models
-import { types as userTypes, resolvers as userResolvers } from '@models/user';
+const dirConfig = {
+  types: 'models/**/types/*.graphql',
+  resolvers: 'models/**/resolvers/*.ts',
+};
 
 // Express & Middleware
 const app = express();
@@ -26,16 +30,22 @@ app.use(
 app.use('/health-check', healthCheck());
 app.use(requestLogger());
 
+// Register types and resolvers
+const typesArray = fileLoader(path.join(__dirname, dirConfig.types));
+const resolversArray = fileLoader(path.join(__dirname, dirConfig.resolvers));
+const typeDefs = mergeTypes(typesArray, { all: true });
+const resolvers = mergeResolvers(resolversArray);
+
 // GraphQL schemas, middleware, and server setup
 const graphqlSchema = makeExecutableSchema({
-  typeDefs: [userTypes],
-  resolvers: { ...userResolvers },
+  typeDefs,
+  resolvers,
 });
 
 const schema = applyMiddleware(
   graphqlSchema,
   resolverLogger,
-  permissions,
+  access,
   validations
 );
 

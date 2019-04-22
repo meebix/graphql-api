@@ -5,8 +5,14 @@ module.exports = {
     logger: true,
   },
   auth: {
-    enable: false,
-    verifyAccess: false,
+    enabled: true,
+    confirmable: true,
+    lockable: {
+      enabled: false,
+    },
+  },
+  mailer: {
+    sendEmails: false,
   },
   contentSecurityPolicy: {
     defaultSrc: ["'self'"],
@@ -24,14 +30,6 @@ module.exports = {
       'cdn.jsdelivr.net',
       'graphcool-playground.netlify.com',
     ],
-  },
-  mailer: {
-    sendEmails: false,
-  },
-  mfa: {
-    enableEmails: true,
-    enableTexts: false,
-    enableCalls: false,
   },
   logger: {
     level: 'debug',

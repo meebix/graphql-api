@@ -1,6 +1,11 @@
 import { ApolloError } from 'apollo-server-express';
 
 const ERRORS = {
+  INVALID_USER_INPUT: {
+    message: 'User input is invalid',
+    code: 'INVALID_USER_INPUT',
+    meta: { level: 'warn' },
+  },
   UNAUTHENTICATED: {
     message: 'Unauthenticated',
     code: 'UNAUTHENTICATED',
@@ -9,7 +14,7 @@ const ERRORS = {
   UNAUTHORIZED: {
     message: 'Unauthorized',
     code: 'UNAUTHORIZED',
-    meta: { level: 'error' },
+    meta: { level: 'warn' },
   },
   INVALID_CREDENTIALS: {
     message: 'Credentials are not valid',
@@ -29,17 +34,37 @@ const ERRORS = {
   ACCOUNT_NOT_CONFIRMED: {
     message: 'User account is not confirmed',
     code: 'ACCOUNT_NOT_CONFIRMED',
-    meta: { level: 'error' },
+    meta: { level: 'warn' },
   },
-  CONFIRMED_TOKEN_EXPIRED: {
-    message: 'Confirmation token has expired',
-    code: 'CONFIRMED_TOKEN_EXPIRED',
-    meta: { level: 'error' },
+  ACCOUNT_LOCKED: {
+    message: 'User account is locked',
+    code: 'ACCOUNT_LOCKED',
+    meta: { level: 'warn' },
   },
-  TOKEN_NOT_FOUND: {
-    message: 'Account token was not found',
-    code: 'TOKEN_NOT_FOUND',
-    meta: { level: 'error' },
+  CONFIRMED_CODE_EXPIRED: {
+    message: 'Confirmation code has expired',
+    code: 'CONFIRMED_CODE_EXPIRED',
+    meta: { level: 'warn' },
+  },
+  RESET_PASSWORD_CODE_EXPIRED: {
+    message: 'Confirmation code has expired',
+    code: 'RESET_PASSWORD_CODE_EXPIRED',
+    meta: { level: 'warn' },
+  },
+  LOCKED_CODE_EXPIRED: {
+    message: 'Account locked code has expired',
+    code: 'LOCKED_CODE_EXPIRED',
+    meta: { level: 'warn' },
+  },
+  CODE_NOT_FOUND: {
+    message: 'Account code was not found',
+    code: 'code_NOT_FOUND',
+    meta: { level: 'warn' },
+  },
+  INVALID_SECURITY_QUESTIONS: {
+    message: 'Invalid security question answer',
+    code: 'INVALID_SECURITY_QUESTIONS',
+    meta: { level: 'warn' },
   },
 };
 
@@ -47,6 +72,14 @@ interface Info {
   [propName: string]: any;
 }
 
+/**
+ * A universal error handler
+ *
+ * @class
+ * @param {String} type - The kind of error to be thrown
+ * @param {Object} additionalInfo - Additional metadata needed for the error
+ * @returns {ApolloError} - An instance of the Apollo error handler
+ */
 const ApiError = (type, additionalInfo?: Info) => {
   const { name, message, ...errProperties }: any =
     (additionalInfo && additionalInfo.err) || {};

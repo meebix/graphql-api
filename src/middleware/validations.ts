@@ -1,8 +1,16 @@
+import path from 'path';
 import { shield } from 'graphql-shield';
-import merge from 'lodash.merge';
+import assign from 'assign-deep';
+import { fileLoader } from 'merge-graphql-schemas';
 
-import { validations as userValidations } from '@models/user';
+const validationsArray = fileLoader(
+  path.join(process.cwd(), 'src/models/**/validations.ts')
+);
 
-const validations = shield(merge(userValidations));
-
-export default validations;
+/**
+ * Create input validations
+ *
+ * @function
+ * @returns {Function} - A Shield function generator to be used as middleware
+ */
+export default shield(assign(...validationsArray));

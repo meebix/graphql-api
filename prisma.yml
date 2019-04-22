@@ -5,6 +5,7 @@ endpoint: 'http://localhost:4466'
 datamodel:
   - src/prisma/models/role.prisma
   - src/prisma/models/user.prisma
+  - src/prisma/models/security-question.prisma
 
 # Specifies language & location for the generated Prisma client
 generate:

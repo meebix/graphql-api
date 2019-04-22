@@ -6,6 +6,14 @@ export const typeDefs = /* GraphQL */ `type AggregateRole {
   count: Int!
 }
 
+type AggregateSecurityQuestion {
+  count: Int!
+}
+
+type AggregateSecurityQuestionAnswer {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -29,6 +37,18 @@ type Mutation {
   upsertRole(where: RoleWhereUniqueInput!, create: RoleCreateInput!, update: RoleUpdateInput!): Role!
   deleteRole(where: RoleWhereUniqueInput!): Role
   deleteManyRoles(where: RoleWhereInput): BatchPayload!
+  createSecurityQuestion(data: SecurityQuestionCreateInput!): SecurityQuestion!
+  updateSecurityQuestion(data: SecurityQuestionUpdateInput!, where: SecurityQuestionWhereUniqueInput!): SecurityQuestion
+  updateManySecurityQuestions(data: SecurityQuestionUpdateManyMutationInput!, where: SecurityQuestionWhereInput): BatchPayload!
+  upsertSecurityQuestion(where: SecurityQuestionWhereUniqueInput!, create: SecurityQuestionCreateInput!, update: SecurityQuestionUpdateInput!): SecurityQuestion!
+  deleteSecurityQuestion(where: SecurityQuestionWhereUniqueInput!): SecurityQuestion
+  deleteManySecurityQuestions(where: SecurityQuestionWhereInput): BatchPayload!
+  createSecurityQuestionAnswer(data: SecurityQuestionAnswerCreateInput!): SecurityQuestionAnswer!
+  updateSecurityQuestionAnswer(data: SecurityQuestionAnswerUpdateInput!, where: SecurityQuestionAnswerWhereUniqueInput!): SecurityQuestionAnswer
+  updateManySecurityQuestionAnswers(data: SecurityQuestionAnswerUpdateManyMutationInput!, where: SecurityQuestionAnswerWhereInput): BatchPayload!
+  upsertSecurityQuestionAnswer(where: SecurityQuestionAnswerWhereUniqueInput!, create: SecurityQuestionAnswerCreateInput!, update: SecurityQuestionAnswerUpdateInput!): SecurityQuestionAnswer!
+  deleteSecurityQuestionAnswer(where: SecurityQuestionAnswerWhereUniqueInput!): SecurityQuestionAnswer
+  deleteManySecurityQuestionAnswers(where: SecurityQuestionAnswerWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -64,6 +84,12 @@ type Query {
   role(where: RoleWhereUniqueInput!): Role
   roles(where: RoleWhereInput, orderBy: RoleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Role]!
   rolesConnection(where: RoleWhereInput, orderBy: RoleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RoleConnection!
+  securityQuestion(where: SecurityQuestionWhereUniqueInput!): SecurityQuestion
+  securityQuestions(where: SecurityQuestionWhereInput, orderBy: SecurityQuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SecurityQuestion]!
+  securityQuestionsConnection(where: SecurityQuestionWhereInput, orderBy: SecurityQuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SecurityQuestionConnection!
+  securityQuestionAnswer(where: SecurityQuestionAnswerWhereUniqueInput!): SecurityQuestionAnswer
+  securityQuestionAnswers(where: SecurityQuestionAnswerWhereInput, orderBy: SecurityQuestionAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SecurityQuestionAnswer]!
+  securityQuestionAnswersConnection(where: SecurityQuestionAnswerWhereInput, orderBy: SecurityQuestionAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SecurityQuestionAnswerConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -186,10 +212,346 @@ input RoleWhereInput {
 
 input RoleWhereUniqueInput {
   id: ID
+  name: RoleName
+}
+
+type SecurityQuestion {
+  id: ID!
+  shortName: String!
+  question: String!
+}
+
+type SecurityQuestionAnswer {
+  id: ID!
+  userAccount: UserAccount!
+  userSecurityQuestion: SecurityQuestion!
+  answer: String!
+}
+
+type SecurityQuestionAnswerConnection {
+  pageInfo: PageInfo!
+  edges: [SecurityQuestionAnswerEdge]!
+  aggregate: AggregateSecurityQuestionAnswer!
+}
+
+input SecurityQuestionAnswerCreateInput {
+  userAccount: UserAccountCreateOneWithoutSecurityQuestionsInput!
+  userSecurityQuestion: SecurityQuestionCreateOneInput!
+  answer: String!
+}
+
+input SecurityQuestionAnswerCreateManyWithoutUserAccountInput {
+  create: [SecurityQuestionAnswerCreateWithoutUserAccountInput!]
+  connect: [SecurityQuestionAnswerWhereUniqueInput!]
+}
+
+input SecurityQuestionAnswerCreateWithoutUserAccountInput {
+  userSecurityQuestion: SecurityQuestionCreateOneInput!
+  answer: String!
+}
+
+type SecurityQuestionAnswerEdge {
+  node: SecurityQuestionAnswer!
+  cursor: String!
+}
+
+enum SecurityQuestionAnswerOrderByInput {
+  id_ASC
+  id_DESC
+  answer_ASC
+  answer_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SecurityQuestionAnswerPreviousValues {
+  id: ID!
+  answer: String!
+}
+
+input SecurityQuestionAnswerScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  answer: String
+  answer_not: String
+  answer_in: [String!]
+  answer_not_in: [String!]
+  answer_lt: String
+  answer_lte: String
+  answer_gt: String
+  answer_gte: String
+  answer_contains: String
+  answer_not_contains: String
+  answer_starts_with: String
+  answer_not_starts_with: String
+  answer_ends_with: String
+  answer_not_ends_with: String
+  AND: [SecurityQuestionAnswerScalarWhereInput!]
+  OR: [SecurityQuestionAnswerScalarWhereInput!]
+  NOT: [SecurityQuestionAnswerScalarWhereInput!]
+}
+
+type SecurityQuestionAnswerSubscriptionPayload {
+  mutation: MutationType!
+  node: SecurityQuestionAnswer
+  updatedFields: [String!]
+  previousValues: SecurityQuestionAnswerPreviousValues
+}
+
+input SecurityQuestionAnswerSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SecurityQuestionAnswerWhereInput
+  AND: [SecurityQuestionAnswerSubscriptionWhereInput!]
+  OR: [SecurityQuestionAnswerSubscriptionWhereInput!]
+  NOT: [SecurityQuestionAnswerSubscriptionWhereInput!]
+}
+
+input SecurityQuestionAnswerUpdateInput {
+  userAccount: UserAccountUpdateOneRequiredWithoutSecurityQuestionsInput
+  userSecurityQuestion: SecurityQuestionUpdateOneRequiredInput
+  answer: String
+}
+
+input SecurityQuestionAnswerUpdateManyDataInput {
+  answer: String
+}
+
+input SecurityQuestionAnswerUpdateManyMutationInput {
+  answer: String
+}
+
+input SecurityQuestionAnswerUpdateManyWithoutUserAccountInput {
+  create: [SecurityQuestionAnswerCreateWithoutUserAccountInput!]
+  delete: [SecurityQuestionAnswerWhereUniqueInput!]
+  connect: [SecurityQuestionAnswerWhereUniqueInput!]
+  set: [SecurityQuestionAnswerWhereUniqueInput!]
+  disconnect: [SecurityQuestionAnswerWhereUniqueInput!]
+  update: [SecurityQuestionAnswerUpdateWithWhereUniqueWithoutUserAccountInput!]
+  upsert: [SecurityQuestionAnswerUpsertWithWhereUniqueWithoutUserAccountInput!]
+  deleteMany: [SecurityQuestionAnswerScalarWhereInput!]
+  updateMany: [SecurityQuestionAnswerUpdateManyWithWhereNestedInput!]
+}
+
+input SecurityQuestionAnswerUpdateManyWithWhereNestedInput {
+  where: SecurityQuestionAnswerScalarWhereInput!
+  data: SecurityQuestionAnswerUpdateManyDataInput!
+}
+
+input SecurityQuestionAnswerUpdateWithoutUserAccountDataInput {
+  userSecurityQuestion: SecurityQuestionUpdateOneRequiredInput
+  answer: String
+}
+
+input SecurityQuestionAnswerUpdateWithWhereUniqueWithoutUserAccountInput {
+  where: SecurityQuestionAnswerWhereUniqueInput!
+  data: SecurityQuestionAnswerUpdateWithoutUserAccountDataInput!
+}
+
+input SecurityQuestionAnswerUpsertWithWhereUniqueWithoutUserAccountInput {
+  where: SecurityQuestionAnswerWhereUniqueInput!
+  update: SecurityQuestionAnswerUpdateWithoutUserAccountDataInput!
+  create: SecurityQuestionAnswerCreateWithoutUserAccountInput!
+}
+
+input SecurityQuestionAnswerWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  userAccount: UserAccountWhereInput
+  userSecurityQuestion: SecurityQuestionWhereInput
+  answer: String
+  answer_not: String
+  answer_in: [String!]
+  answer_not_in: [String!]
+  answer_lt: String
+  answer_lte: String
+  answer_gt: String
+  answer_gte: String
+  answer_contains: String
+  answer_not_contains: String
+  answer_starts_with: String
+  answer_not_starts_with: String
+  answer_ends_with: String
+  answer_not_ends_with: String
+  AND: [SecurityQuestionAnswerWhereInput!]
+  OR: [SecurityQuestionAnswerWhereInput!]
+  NOT: [SecurityQuestionAnswerWhereInput!]
+}
+
+input SecurityQuestionAnswerWhereUniqueInput {
+  id: ID
+}
+
+type SecurityQuestionConnection {
+  pageInfo: PageInfo!
+  edges: [SecurityQuestionEdge]!
+  aggregate: AggregateSecurityQuestion!
+}
+
+input SecurityQuestionCreateInput {
+  shortName: String!
+  question: String!
+}
+
+input SecurityQuestionCreateOneInput {
+  create: SecurityQuestionCreateInput
+  connect: SecurityQuestionWhereUniqueInput
+}
+
+type SecurityQuestionEdge {
+  node: SecurityQuestion!
+  cursor: String!
+}
+
+enum SecurityQuestionOrderByInput {
+  id_ASC
+  id_DESC
+  shortName_ASC
+  shortName_DESC
+  question_ASC
+  question_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SecurityQuestionPreviousValues {
+  id: ID!
+  shortName: String!
+  question: String!
+}
+
+type SecurityQuestionSubscriptionPayload {
+  mutation: MutationType!
+  node: SecurityQuestion
+  updatedFields: [String!]
+  previousValues: SecurityQuestionPreviousValues
+}
+
+input SecurityQuestionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SecurityQuestionWhereInput
+  AND: [SecurityQuestionSubscriptionWhereInput!]
+  OR: [SecurityQuestionSubscriptionWhereInput!]
+  NOT: [SecurityQuestionSubscriptionWhereInput!]
+}
+
+input SecurityQuestionUpdateDataInput {
+  shortName: String
+  question: String
+}
+
+input SecurityQuestionUpdateInput {
+  shortName: String
+  question: String
+}
+
+input SecurityQuestionUpdateManyMutationInput {
+  shortName: String
+  question: String
+}
+
+input SecurityQuestionUpdateOneRequiredInput {
+  create: SecurityQuestionCreateInput
+  update: SecurityQuestionUpdateDataInput
+  upsert: SecurityQuestionUpsertNestedInput
+  connect: SecurityQuestionWhereUniqueInput
+}
+
+input SecurityQuestionUpsertNestedInput {
+  update: SecurityQuestionUpdateDataInput!
+  create: SecurityQuestionCreateInput!
+}
+
+input SecurityQuestionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  shortName: String
+  shortName_not: String
+  shortName_in: [String!]
+  shortName_not_in: [String!]
+  shortName_lt: String
+  shortName_lte: String
+  shortName_gt: String
+  shortName_gte: String
+  shortName_contains: String
+  shortName_not_contains: String
+  shortName_starts_with: String
+  shortName_not_starts_with: String
+  shortName_ends_with: String
+  shortName_not_ends_with: String
+  question: String
+  question_not: String
+  question_in: [String!]
+  question_not_in: [String!]
+  question_lt: String
+  question_lte: String
+  question_gt: String
+  question_gte: String
+  question_contains: String
+  question_not_contains: String
+  question_starts_with: String
+  question_not_starts_with: String
+  question_ends_with: String
+  question_not_ends_with: String
+  AND: [SecurityQuestionWhereInput!]
+  OR: [SecurityQuestionWhereInput!]
+  NOT: [SecurityQuestionWhereInput!]
+}
+
+input SecurityQuestionWhereUniqueInput {
+  id: ID
+  shortName: String
 }
 
 type Subscription {
   role(where: RoleSubscriptionWhereInput): RoleSubscriptionPayload
+  securityQuestion(where: SecurityQuestionSubscriptionWhereInput): SecurityQuestionSubscriptionPayload
+  securityQuestionAnswer(where: SecurityQuestionAnswerSubscriptionWhereInput): SecurityQuestionAnswerSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   userAccount(where: UserAccountSubscriptionWhereInput): UserAccountSubscriptionPayload
 }
@@ -213,11 +575,18 @@ type UserAccount {
   id: ID!
   user: User!
   confirmed: Boolean!
-  confirmedToken: String
+  confirmedCode: Int
   confirmedExpires: String
   locked: Boolean!
-  lockedToken: String
+  lockedCode: Int
   lockedExpires: String
+  resetPasswordCode: Int
+  resetPasswordExpires: String
+  securityQuestions(where: SecurityQuestionAnswerWhereInput, orderBy: SecurityQuestionAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SecurityQuestionAnswer!]
+  loginAttempts: Int!
+  securityQuestionAttempts: Int!
+  lastVisit: DateTime
+  ip: String
   updatedAt: DateTime!
   createdAt: DateTime!
   deletedAt: DateTime
@@ -232,12 +601,24 @@ type UserAccountConnection {
 input UserAccountCreateInput {
   user: UserCreateOneWithoutUserAccountInput!
   confirmed: Boolean
-  confirmedToken: String
+  confirmedCode: Int
   confirmedExpires: String
   locked: Boolean
-  lockedToken: String
+  lockedCode: Int
   lockedExpires: String
+  resetPasswordCode: Int
+  resetPasswordExpires: String
+  securityQuestions: SecurityQuestionAnswerCreateManyWithoutUserAccountInput
+  loginAttempts: Int
+  securityQuestionAttempts: Int
+  lastVisit: DateTime
+  ip: String
   deletedAt: DateTime
+}
+
+input UserAccountCreateOneWithoutSecurityQuestionsInput {
+  create: UserAccountCreateWithoutSecurityQuestionsInput
+  connect: UserAccountWhereUniqueInput
 }
 
 input UserAccountCreateOneWithoutUserInput {
@@ -245,13 +626,37 @@ input UserAccountCreateOneWithoutUserInput {
   connect: UserAccountWhereUniqueInput
 }
 
-input UserAccountCreateWithoutUserInput {
+input UserAccountCreateWithoutSecurityQuestionsInput {
+  user: UserCreateOneWithoutUserAccountInput!
   confirmed: Boolean
-  confirmedToken: String
+  confirmedCode: Int
   confirmedExpires: String
   locked: Boolean
-  lockedToken: String
+  lockedCode: Int
   lockedExpires: String
+  resetPasswordCode: Int
+  resetPasswordExpires: String
+  loginAttempts: Int
+  securityQuestionAttempts: Int
+  lastVisit: DateTime
+  ip: String
+  deletedAt: DateTime
+}
+
+input UserAccountCreateWithoutUserInput {
+  confirmed: Boolean
+  confirmedCode: Int
+  confirmedExpires: String
+  locked: Boolean
+  lockedCode: Int
+  lockedExpires: String
+  resetPasswordCode: Int
+  resetPasswordExpires: String
+  securityQuestions: SecurityQuestionAnswerCreateManyWithoutUserAccountInput
+  loginAttempts: Int
+  securityQuestionAttempts: Int
+  lastVisit: DateTime
+  ip: String
   deletedAt: DateTime
 }
 
@@ -265,16 +670,28 @@ enum UserAccountOrderByInput {
   id_DESC
   confirmed_ASC
   confirmed_DESC
-  confirmedToken_ASC
-  confirmedToken_DESC
+  confirmedCode_ASC
+  confirmedCode_DESC
   confirmedExpires_ASC
   confirmedExpires_DESC
   locked_ASC
   locked_DESC
-  lockedToken_ASC
-  lockedToken_DESC
+  lockedCode_ASC
+  lockedCode_DESC
   lockedExpires_ASC
   lockedExpires_DESC
+  resetPasswordCode_ASC
+  resetPasswordCode_DESC
+  resetPasswordExpires_ASC
+  resetPasswordExpires_DESC
+  loginAttempts_ASC
+  loginAttempts_DESC
+  securityQuestionAttempts_ASC
+  securityQuestionAttempts_DESC
+  lastVisit_ASC
+  lastVisit_DESC
+  ip_ASC
+  ip_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -286,11 +703,17 @@ enum UserAccountOrderByInput {
 type UserAccountPreviousValues {
   id: ID!
   confirmed: Boolean!
-  confirmedToken: String
+  confirmedCode: Int
   confirmedExpires: String
   locked: Boolean!
-  lockedToken: String
+  lockedCode: Int
   lockedExpires: String
+  resetPasswordCode: Int
+  resetPasswordExpires: String
+  loginAttempts: Int!
+  securityQuestionAttempts: Int!
+  lastVisit: DateTime
+  ip: String
   updatedAt: DateTime!
   createdAt: DateTime!
   deletedAt: DateTime
@@ -317,22 +740,42 @@ input UserAccountSubscriptionWhereInput {
 input UserAccountUpdateInput {
   user: UserUpdateOneRequiredWithoutUserAccountInput
   confirmed: Boolean
-  confirmedToken: String
+  confirmedCode: Int
   confirmedExpires: String
   locked: Boolean
-  lockedToken: String
+  lockedCode: Int
   lockedExpires: String
+  resetPasswordCode: Int
+  resetPasswordExpires: String
+  securityQuestions: SecurityQuestionAnswerUpdateManyWithoutUserAccountInput
+  loginAttempts: Int
+  securityQuestionAttempts: Int
+  lastVisit: DateTime
+  ip: String
   deletedAt: DateTime
 }
 
 input UserAccountUpdateManyMutationInput {
   confirmed: Boolean
-  confirmedToken: String
+  confirmedCode: Int
   confirmedExpires: String
   locked: Boolean
-  lockedToken: String
+  lockedCode: Int
   lockedExpires: String
+  resetPasswordCode: Int
+  resetPasswordExpires: String
+  loginAttempts: Int
+  securityQuestionAttempts: Int
+  lastVisit: DateTime
+  ip: String
   deletedAt: DateTime
+}
+
+input UserAccountUpdateOneRequiredWithoutSecurityQuestionsInput {
+  create: UserAccountCreateWithoutSecurityQuestionsInput
+  update: UserAccountUpdateWithoutSecurityQuestionsDataInput
+  upsert: UserAccountUpsertWithoutSecurityQuestionsInput
+  connect: UserAccountWhereUniqueInput
 }
 
 input UserAccountUpdateOneRequiredWithoutUserInput {
@@ -342,14 +785,43 @@ input UserAccountUpdateOneRequiredWithoutUserInput {
   connect: UserAccountWhereUniqueInput
 }
 
-input UserAccountUpdateWithoutUserDataInput {
+input UserAccountUpdateWithoutSecurityQuestionsDataInput {
+  user: UserUpdateOneRequiredWithoutUserAccountInput
   confirmed: Boolean
-  confirmedToken: String
+  confirmedCode: Int
   confirmedExpires: String
   locked: Boolean
-  lockedToken: String
+  lockedCode: Int
   lockedExpires: String
+  resetPasswordCode: Int
+  resetPasswordExpires: String
+  loginAttempts: Int
+  securityQuestionAttempts: Int
+  lastVisit: DateTime
+  ip: String
   deletedAt: DateTime
+}
+
+input UserAccountUpdateWithoutUserDataInput {
+  confirmed: Boolean
+  confirmedCode: Int
+  confirmedExpires: String
+  locked: Boolean
+  lockedCode: Int
+  lockedExpires: String
+  resetPasswordCode: Int
+  resetPasswordExpires: String
+  securityQuestions: SecurityQuestionAnswerUpdateManyWithoutUserAccountInput
+  loginAttempts: Int
+  securityQuestionAttempts: Int
+  lastVisit: DateTime
+  ip: String
+  deletedAt: DateTime
+}
+
+input UserAccountUpsertWithoutSecurityQuestionsInput {
+  update: UserAccountUpdateWithoutSecurityQuestionsDataInput!
+  create: UserAccountCreateWithoutSecurityQuestionsInput!
 }
 
 input UserAccountUpsertWithoutUserInput {
@@ -375,20 +847,14 @@ input UserAccountWhereInput {
   user: UserWhereInput
   confirmed: Boolean
   confirmed_not: Boolean
-  confirmedToken: String
-  confirmedToken_not: String
-  confirmedToken_in: [String!]
-  confirmedToken_not_in: [String!]
-  confirmedToken_lt: String
-  confirmedToken_lte: String
-  confirmedToken_gt: String
-  confirmedToken_gte: String
-  confirmedToken_contains: String
-  confirmedToken_not_contains: String
-  confirmedToken_starts_with: String
-  confirmedToken_not_starts_with: String
-  confirmedToken_ends_with: String
-  confirmedToken_not_ends_with: String
+  confirmedCode: Int
+  confirmedCode_not: Int
+  confirmedCode_in: [Int!]
+  confirmedCode_not_in: [Int!]
+  confirmedCode_lt: Int
+  confirmedCode_lte: Int
+  confirmedCode_gt: Int
+  confirmedCode_gte: Int
   confirmedExpires: String
   confirmedExpires_not: String
   confirmedExpires_in: [String!]
@@ -405,20 +871,14 @@ input UserAccountWhereInput {
   confirmedExpires_not_ends_with: String
   locked: Boolean
   locked_not: Boolean
-  lockedToken: String
-  lockedToken_not: String
-  lockedToken_in: [String!]
-  lockedToken_not_in: [String!]
-  lockedToken_lt: String
-  lockedToken_lte: String
-  lockedToken_gt: String
-  lockedToken_gte: String
-  lockedToken_contains: String
-  lockedToken_not_contains: String
-  lockedToken_starts_with: String
-  lockedToken_not_starts_with: String
-  lockedToken_ends_with: String
-  lockedToken_not_ends_with: String
+  lockedCode: Int
+  lockedCode_not: Int
+  lockedCode_in: [Int!]
+  lockedCode_not_in: [Int!]
+  lockedCode_lt: Int
+  lockedCode_lte: Int
+  lockedCode_gt: Int
+  lockedCode_gte: Int
   lockedExpires: String
   lockedExpires_not: String
   lockedExpires_in: [String!]
@@ -433,6 +893,69 @@ input UserAccountWhereInput {
   lockedExpires_not_starts_with: String
   lockedExpires_ends_with: String
   lockedExpires_not_ends_with: String
+  resetPasswordCode: Int
+  resetPasswordCode_not: Int
+  resetPasswordCode_in: [Int!]
+  resetPasswordCode_not_in: [Int!]
+  resetPasswordCode_lt: Int
+  resetPasswordCode_lte: Int
+  resetPasswordCode_gt: Int
+  resetPasswordCode_gte: Int
+  resetPasswordExpires: String
+  resetPasswordExpires_not: String
+  resetPasswordExpires_in: [String!]
+  resetPasswordExpires_not_in: [String!]
+  resetPasswordExpires_lt: String
+  resetPasswordExpires_lte: String
+  resetPasswordExpires_gt: String
+  resetPasswordExpires_gte: String
+  resetPasswordExpires_contains: String
+  resetPasswordExpires_not_contains: String
+  resetPasswordExpires_starts_with: String
+  resetPasswordExpires_not_starts_with: String
+  resetPasswordExpires_ends_with: String
+  resetPasswordExpires_not_ends_with: String
+  securityQuestions_every: SecurityQuestionAnswerWhereInput
+  securityQuestions_some: SecurityQuestionAnswerWhereInput
+  securityQuestions_none: SecurityQuestionAnswerWhereInput
+  loginAttempts: Int
+  loginAttempts_not: Int
+  loginAttempts_in: [Int!]
+  loginAttempts_not_in: [Int!]
+  loginAttempts_lt: Int
+  loginAttempts_lte: Int
+  loginAttempts_gt: Int
+  loginAttempts_gte: Int
+  securityQuestionAttempts: Int
+  securityQuestionAttempts_not: Int
+  securityQuestionAttempts_in: [Int!]
+  securityQuestionAttempts_not_in: [Int!]
+  securityQuestionAttempts_lt: Int
+  securityQuestionAttempts_lte: Int
+  securityQuestionAttempts_gt: Int
+  securityQuestionAttempts_gte: Int
+  lastVisit: DateTime
+  lastVisit_not: DateTime
+  lastVisit_in: [DateTime!]
+  lastVisit_not_in: [DateTime!]
+  lastVisit_lt: DateTime
+  lastVisit_lte: DateTime
+  lastVisit_gt: DateTime
+  lastVisit_gte: DateTime
+  ip: String
+  ip_not: String
+  ip_in: [String!]
+  ip_not_in: [String!]
+  ip_lt: String
+  ip_lte: String
+  ip_gt: String
+  ip_gte: String
+  ip_contains: String
+  ip_not_contains: String
+  ip_starts_with: String
+  ip_not_starts_with: String
+  ip_ends_with: String
+  ip_not_ends_with: String
   updatedAt: DateTime
   updatedAt_not: DateTime
   updatedAt_in: [DateTime!]
@@ -464,8 +987,9 @@ input UserAccountWhereInput {
 
 input UserAccountWhereUniqueInput {
   id: ID
-  confirmedToken: String
-  lockedToken: String
+  confirmedCode: Int
+  lockedCode: Int
+  resetPasswordCode: Int
 }
 
 type UserConnection {

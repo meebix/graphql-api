@@ -6,7 +6,7 @@ import ApiError from '@modules/errors';
 const emailClient = new SparkPost(process.env.SPARKPOST);
 
 /**
- * Send transmission email
+ * Send email trasmission
  *
  * @function
  * @param {Object} user - Information about the user
@@ -25,7 +25,7 @@ export const send = (user, options) => {
     .send({
       campaign_id: options.campaignId,
       metadata: {
-        uuid: user.uuid,
+        cuid: user.id,
       },
       options: {
         skip_suppression: false,
@@ -36,7 +36,7 @@ export const send = (user, options) => {
       recipients: [
         {
           address: {
-            name: user.first_name,
+            name: user.firstName,
             email: user.email,
           },
           substitution_data: options.substitutionData(user),

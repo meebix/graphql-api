@@ -17,7 +17,7 @@ export const CONFIRMATION_EMAIL = {
   templateId: 'signup-confirmation',
   substitutionData: user => ({
     firstName: user.firstName,
-    confirmedToken: user.confirmedToken,
+    confirmedCode: user.userAccount.confirmedCode,
   }),
 };
 
@@ -29,7 +29,7 @@ export const RESET_PASSWORD_EMAIL = {
   templateId: 'reset-password',
   substitutionData: user => ({
     firstName: user.firstName,
-    resetPasswordCode: user.resetPasswordCode,
+    resetPasswordCode: user.userAccount.resetPasswordCode,
   }),
 };
 
@@ -41,6 +41,6 @@ export const UNLOCK_ACCOUNT_EMAIL = {
   templateId: 'unlock-account',
   substitutionData: user => ({
     firstName: user.firstName,
-    unlockAccountCode: user.unlockAccountCode,
+    lockedCode: user.userAccount.lockedCode,
   }),
 };

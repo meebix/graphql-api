@@ -29,6 +29,6 @@
       "@prisma/*": ["prisma/*"]
     }
   },
-  "include": ["src/**/*", "seeders/**/*"],
+  "include": ["src/**/*", "src/seeders/**/*"],
   "exclude": ["node_modules", "dist"]
 }
