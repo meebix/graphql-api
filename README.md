@@ -1,1 +1,1 @@
-# Node API
+# GraphQL API Server

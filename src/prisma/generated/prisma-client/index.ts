@@ -43,124 +43,104 @@ export interface Prisma {
    */
 
   role: (where: RoleWhereUniqueInput) => RolePromise;
-  roles: (
-    args?: {
-      where?: RoleWhereInput;
-      orderBy?: RoleOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<Role>;
-  rolesConnection: (
-    args?: {
-      where?: RoleWhereInput;
-      orderBy?: RoleOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => RoleConnectionPromise;
+  roles: (args?: {
+    where?: RoleWhereInput;
+    orderBy?: RoleOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Role>;
+  rolesConnection: (args?: {
+    where?: RoleWhereInput;
+    orderBy?: RoleOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => RoleConnectionPromise;
   securityQuestion: (
     where: SecurityQuestionWhereUniqueInput
   ) => SecurityQuestionPromise;
-  securityQuestions: (
-    args?: {
-      where?: SecurityQuestionWhereInput;
-      orderBy?: SecurityQuestionOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<SecurityQuestion>;
-  securityQuestionsConnection: (
-    args?: {
-      where?: SecurityQuestionWhereInput;
-      orderBy?: SecurityQuestionOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => SecurityQuestionConnectionPromise;
+  securityQuestions: (args?: {
+    where?: SecurityQuestionWhereInput;
+    orderBy?: SecurityQuestionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<SecurityQuestion>;
+  securityQuestionsConnection: (args?: {
+    where?: SecurityQuestionWhereInput;
+    orderBy?: SecurityQuestionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => SecurityQuestionConnectionPromise;
   securityQuestionAnswer: (
     where: SecurityQuestionAnswerWhereUniqueInput
   ) => SecurityQuestionAnswerPromise;
-  securityQuestionAnswers: (
-    args?: {
-      where?: SecurityQuestionAnswerWhereInput;
-      orderBy?: SecurityQuestionAnswerOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<SecurityQuestionAnswer>;
-  securityQuestionAnswersConnection: (
-    args?: {
-      where?: SecurityQuestionAnswerWhereInput;
-      orderBy?: SecurityQuestionAnswerOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => SecurityQuestionAnswerConnectionPromise;
+  securityQuestionAnswers: (args?: {
+    where?: SecurityQuestionAnswerWhereInput;
+    orderBy?: SecurityQuestionAnswerOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<SecurityQuestionAnswer>;
+  securityQuestionAnswersConnection: (args?: {
+    where?: SecurityQuestionAnswerWhereInput;
+    orderBy?: SecurityQuestionAnswerOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => SecurityQuestionAnswerConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserPromise;
-  users: (
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<User>;
-  usersConnection: (
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => UserConnectionPromise;
+  users: (args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<User>;
+  usersConnection: (args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => UserConnectionPromise;
   userAccount: (where: UserAccountWhereUniqueInput) => UserAccountPromise;
-  userAccounts: (
-    args?: {
-      where?: UserAccountWhereInput;
-      orderBy?: UserAccountOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => FragmentableArray<UserAccount>;
-  userAccountsConnection: (
-    args?: {
-      where?: UserAccountWhereInput;
-      orderBy?: UserAccountOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => UserAccountConnectionPromise;
+  userAccounts: (args?: {
+    where?: UserAccountWhereInput;
+    orderBy?: UserAccountOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<UserAccount>;
+  userAccountsConnection: (args?: {
+    where?: UserAccountWhereInput;
+    orderBy?: UserAccountOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => UserAccountConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -168,43 +148,37 @@ export interface Prisma {
    */
 
   createRole: (data: RoleCreateInput) => RolePromise;
-  updateRole: (
-    args: { data: RoleUpdateInput; where: RoleWhereUniqueInput }
-  ) => RolePromise;
-  updateManyRoles: (
-    args: { data: RoleUpdateManyMutationInput; where?: RoleWhereInput }
-  ) => BatchPayloadPromise;
-  upsertRole: (
-    args: {
-      where: RoleWhereUniqueInput;
-      create: RoleCreateInput;
-      update: RoleUpdateInput;
-    }
-  ) => RolePromise;
+  updateRole: (args: {
+    data: RoleUpdateInput;
+    where: RoleWhereUniqueInput;
+  }) => RolePromise;
+  updateManyRoles: (args: {
+    data: RoleUpdateManyMutationInput;
+    where?: RoleWhereInput;
+  }) => BatchPayloadPromise;
+  upsertRole: (args: {
+    where: RoleWhereUniqueInput;
+    create: RoleCreateInput;
+    update: RoleUpdateInput;
+  }) => RolePromise;
   deleteRole: (where: RoleWhereUniqueInput) => RolePromise;
   deleteManyRoles: (where?: RoleWhereInput) => BatchPayloadPromise;
   createSecurityQuestion: (
     data: SecurityQuestionCreateInput
   ) => SecurityQuestionPromise;
-  updateSecurityQuestion: (
-    args: {
-      data: SecurityQuestionUpdateInput;
-      where: SecurityQuestionWhereUniqueInput;
-    }
-  ) => SecurityQuestionPromise;
-  updateManySecurityQuestions: (
-    args: {
-      data: SecurityQuestionUpdateManyMutationInput;
-      where?: SecurityQuestionWhereInput;
-    }
-  ) => BatchPayloadPromise;
-  upsertSecurityQuestion: (
-    args: {
-      where: SecurityQuestionWhereUniqueInput;
-      create: SecurityQuestionCreateInput;
-      update: SecurityQuestionUpdateInput;
-    }
-  ) => SecurityQuestionPromise;
+  updateSecurityQuestion: (args: {
+    data: SecurityQuestionUpdateInput;
+    where: SecurityQuestionWhereUniqueInput;
+  }) => SecurityQuestionPromise;
+  updateManySecurityQuestions: (args: {
+    data: SecurityQuestionUpdateManyMutationInput;
+    where?: SecurityQuestionWhereInput;
+  }) => BatchPayloadPromise;
+  upsertSecurityQuestion: (args: {
+    where: SecurityQuestionWhereUniqueInput;
+    create: SecurityQuestionCreateInput;
+    update: SecurityQuestionUpdateInput;
+  }) => SecurityQuestionPromise;
   deleteSecurityQuestion: (
     where: SecurityQuestionWhereUniqueInput
   ) => SecurityQuestionPromise;
@@ -214,25 +188,19 @@ export interface Prisma {
   createSecurityQuestionAnswer: (
     data: SecurityQuestionAnswerCreateInput
   ) => SecurityQuestionAnswerPromise;
-  updateSecurityQuestionAnswer: (
-    args: {
-      data: SecurityQuestionAnswerUpdateInput;
-      where: SecurityQuestionAnswerWhereUniqueInput;
-    }
-  ) => SecurityQuestionAnswerPromise;
-  updateManySecurityQuestionAnswers: (
-    args: {
-      data: SecurityQuestionAnswerUpdateManyMutationInput;
-      where?: SecurityQuestionAnswerWhereInput;
-    }
-  ) => BatchPayloadPromise;
-  upsertSecurityQuestionAnswer: (
-    args: {
-      where: SecurityQuestionAnswerWhereUniqueInput;
-      create: SecurityQuestionAnswerCreateInput;
-      update: SecurityQuestionAnswerUpdateInput;
-    }
-  ) => SecurityQuestionAnswerPromise;
+  updateSecurityQuestionAnswer: (args: {
+    data: SecurityQuestionAnswerUpdateInput;
+    where: SecurityQuestionAnswerWhereUniqueInput;
+  }) => SecurityQuestionAnswerPromise;
+  updateManySecurityQuestionAnswers: (args: {
+    data: SecurityQuestionAnswerUpdateManyMutationInput;
+    where?: SecurityQuestionAnswerWhereInput;
+  }) => BatchPayloadPromise;
+  upsertSecurityQuestionAnswer: (args: {
+    where: SecurityQuestionAnswerWhereUniqueInput;
+    create: SecurityQuestionAnswerCreateInput;
+    update: SecurityQuestionAnswerUpdateInput;
+  }) => SecurityQuestionAnswerPromise;
   deleteSecurityQuestionAnswer: (
     where: SecurityQuestionAnswerWhereUniqueInput
   ) => SecurityQuestionAnswerPromise;
@@ -240,38 +208,35 @@ export interface Prisma {
     where?: SecurityQuestionAnswerWhereInput
   ) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
-  updateUser: (
-    args: { data: UserUpdateInput; where: UserWhereUniqueInput }
-  ) => UserPromise;
-  updateManyUsers: (
-    args: { data: UserUpdateManyMutationInput; where?: UserWhereInput }
-  ) => BatchPayloadPromise;
-  upsertUser: (
-    args: {
-      where: UserWhereUniqueInput;
-      create: UserCreateInput;
-      update: UserUpdateInput;
-    }
-  ) => UserPromise;
+  updateUser: (args: {
+    data: UserUpdateInput;
+    where: UserWhereUniqueInput;
+  }) => UserPromise;
+  updateManyUsers: (args: {
+    data: UserUpdateManyMutationInput;
+    where?: UserWhereInput;
+  }) => BatchPayloadPromise;
+  upsertUser: (args: {
+    where: UserWhereUniqueInput;
+    create: UserCreateInput;
+    update: UserUpdateInput;
+  }) => UserPromise;
   deleteUser: (where: UserWhereUniqueInput) => UserPromise;
   deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
   createUserAccount: (data: UserAccountCreateInput) => UserAccountPromise;
-  updateUserAccount: (
-    args: { data: UserAccountUpdateInput; where: UserAccountWhereUniqueInput }
-  ) => UserAccountPromise;
-  updateManyUserAccounts: (
-    args: {
-      data: UserAccountUpdateManyMutationInput;
-      where?: UserAccountWhereInput;
-    }
-  ) => BatchPayloadPromise;
-  upsertUserAccount: (
-    args: {
-      where: UserAccountWhereUniqueInput;
-      create: UserAccountCreateInput;
-      update: UserAccountUpdateInput;
-    }
-  ) => UserAccountPromise;
+  updateUserAccount: (args: {
+    data: UserAccountUpdateInput;
+    where: UserAccountWhereUniqueInput;
+  }) => UserAccountPromise;
+  updateManyUserAccounts: (args: {
+    data: UserAccountUpdateManyMutationInput;
+    where?: UserAccountWhereInput;
+  }) => BatchPayloadPromise;
+  upsertUserAccount: (args: {
+    where: UserAccountWhereUniqueInput;
+    create: UserAccountCreateInput;
+    update: UserAccountUpdateInput;
+  }) => UserAccountPromise;
   deleteUserAccount: (where: UserAccountWhereUniqueInput) => UserAccountPromise;
   deleteManyUserAccounts: (
     where?: UserAccountWhereInput
@@ -1452,17 +1417,15 @@ export interface UserAccountPromise extends Promise<UserAccount>, Fragmentable {
   lockedExpires: () => Promise<String>;
   resetPasswordCode: () => Promise<Int>;
   resetPasswordExpires: () => Promise<String>;
-  securityQuestions: <T = FragmentableArray<SecurityQuestionAnswer>>(
-    args?: {
-      where?: SecurityQuestionAnswerWhereInput;
-      orderBy?: SecurityQuestionAnswerOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  securityQuestions: <T = FragmentableArray<SecurityQuestionAnswer>>(args?: {
+    where?: SecurityQuestionAnswerWhereInput;
+    orderBy?: SecurityQuestionAnswerOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   loginAttempts: () => Promise<Int>;
   securityQuestionAttempts: () => Promise<Int>;
   lastVisit: () => Promise<DateTimeOutput>;
@@ -1487,17 +1450,15 @@ export interface UserAccountSubscription
   resetPasswordExpires: () => Promise<AsyncIterator<String>>;
   securityQuestions: <
     T = Promise<AsyncIterator<SecurityQuestionAnswerSubscription>>
-  >(
-    args?: {
-      where?: SecurityQuestionAnswerWhereInput;
-      orderBy?: SecurityQuestionAnswerOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
+  >(args?: {
+    where?: SecurityQuestionAnswerWhereInput;
+    orderBy?: SecurityQuestionAnswerOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   loginAttempts: () => Promise<AsyncIterator<Int>>;
   securityQuestionAttempts: () => Promise<AsyncIterator<Int>>;
   lastVisit: () => Promise<AsyncIterator<DateTimeOutput>>;
