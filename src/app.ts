@@ -8,6 +8,7 @@ import helmet from 'helmet';
 import healthCheck from 'express-healthcheck';
 import { prisma } from '@prisma/generated/prisma-client';
 import logger from '@modules/logger';
+import { normalizeError } from '@modules/errors';
 import requestLogger from '@middleware/request-logger';
 import resolverLogger from '@middleware/resolver-logger';
 import access from '@middleware/access';
@@ -59,22 +60,12 @@ const server = new ApolloServer({
   playground: config.get('graphql.playground'),
   debug: config.get('graphql.debug'),
   formatError: err => {
-    const name = err.extensions.exception.name || 'Error';
-    const level = err.extensions.exception.level || 'error';
+    const { code, level } = normalizeError(err);
 
-    logger[level]({ err }, `${name}: ${err.message}`);
+    // Ensures a more descriptive "code" is set for every error
+    err.extensions.code = code;
 
-    if (name === 'ValidationError') {
-      err.extensions.code = 'VALIDATION_ERROR';
-
-      delete err.extensions.exception.name;
-      delete err.extensions.exception.value;
-      delete err.extensions.exception.message;
-      delete err.extensions.exception.params;
-      delete err.extensions.exception.stacktrace;
-    } else {
-      delete err.extensions.exception;
-    }
+    logger[level]({ err }, `${err.name}: ${err.message}`);
     return err;
   },
 });

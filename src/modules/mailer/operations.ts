@@ -1,13 +1,14 @@
 import SparkPost from 'sparkpost';
 import config from 'config';
 import logger from '@modules/logger';
-import ApiError from '@modules/errors';
+import { ExternalError } from '@modules/errors';
 
 const emailClient = new SparkPost(process.env.SPARKPOST);
 
 /**
  * Send email trasmission
  *
+ * @async
  * @function
  * @param {Object} user - Information about the user
  * @param {Object} options - SparkPost transmission options
@@ -16,13 +17,13 @@ const emailClient = new SparkPost(process.env.SPARKPOST);
  * @param {Object} options.substitutionData - SparkPost email template data
  * @returns {Promise}
  */
-export const send = (user, options) => {
+export const send = async (user, options) => {
   if (!config.get('mailer.sendEmails')) {
     return new Promise(resolve => resolve());
   }
 
-  return emailClient.transmissions
-    .send({
+  try {
+    const data = await emailClient.transmissions.send({
       campaign_id: options.campaignId,
       metadata: {
         cuid: user.id,
@@ -42,18 +43,19 @@ export const send = (user, options) => {
           substitution_data: options.substitutionData(user),
         },
       ],
-    })
-    .then(data => {
-      logger.info(
-        {
-          results: data.results,
-          campaignId: options.campaignId,
-          templateId: options.templateId,
-        },
-        `Sent email to user: ${user.id}`
-      );
-    })
-    .catch(err => {
-      throw ApiError('EMAIL_FAILURE', { err });
     });
+
+    logger.info(
+      {
+        results: data.results,
+        campaignId: options.campaignId,
+        templateId: options.templateId,
+      },
+      `Sent email to user: ${user.id}`
+    );
+  } catch (error) {
+    throw new ExternalError(error, { source: 'SparkPost' });
+  }
+
+  return undefined;
 };

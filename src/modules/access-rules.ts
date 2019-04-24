@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { rule } from 'graphql-shield';
 import config from 'config';
-import ApiError from '@modules/errors';
+import { ExternalError } from '@modules/errors';
 
 /**
  * Checks if a user is authenticated
@@ -36,7 +36,7 @@ export const isAuthenticated = rule()(async (parent, args, context, info) => {
 
   return jwt.verify(token, config.get('auth.jwt.secret'), (err, decoded) => {
     if (err) {
-      return ApiError('UNAUTHENTICATED', { err });
+      return new ExternalError(err, { source: 'JsonWebToken' });
     }
 
     // Add the user to context for continued access

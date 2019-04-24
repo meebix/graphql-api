@@ -33,6 +33,11 @@ export default async () => {
       password,
       phoneCountryCode: '1',
       phone: chance.phone({ formatted: false, country: 'us' }),
+      country: 'United States',
+      address1: chance.address(),
+      city: chance.city(),
+      state: chance.state(),
+      postalCode: chance.zip(),
       userAccount: {
         create: config.get('auth.confirmable')
           ? {

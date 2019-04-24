@@ -7,13 +7,11 @@ import { isAuthenticated } from '@modules/access-rules';
  * @returns {Object} - A Shield object for permission middleware
  */
 export default {
-  Query: {
-    getSecurityQuestions: isAuthenticated,
+  Mutation: {
+    createCustomer: allow,
+    updateCustomer: allow,
   },
-  SecurityQuestion: {
-    '*': allow,
-  },
-  SecurityQuestionAnswer: {
-    '*': allow,
+  Customer: {
+    '*': isAuthenticated,
   },
 };

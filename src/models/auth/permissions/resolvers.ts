@@ -1,5 +1,5 @@
 import { rule } from 'graphql-shield';
-import ApiError from '@modules/errors';
+import { InternalError } from '@modules/errors';
 import config from 'config';
 import isBefore from 'date-fns/is_before';
 
@@ -24,11 +24,11 @@ export const accountConfirmed = rule()(async (parent, args, context, info) => {
     .userAccount();
 
   if (!userAccount) {
-    return ApiError('INVALID_USER_INPUT', { args });
+    return new InternalError('INVALID_USER_INPUT', { args });
   }
 
   if (!userAccount.confirmed) {
-    return ApiError('ACCOUNT_NOT_CONFIRMED');
+    return new InternalError('ACCOUNT_NOT_CONFIRMED');
   }
 
   return true;
@@ -56,11 +56,11 @@ export const confirmationCodeNotExpired = rule()(
     });
 
     if (!userAccount) {
-      throw ApiError('CODE_NOT_FOUND', { code: 'confirmedCode' });
+      throw new InternalError('CODE_NOT_FOUND', { code: 'confirmedCode' });
     }
 
     if (isBefore(userAccount.confirmedExpires, new Date())) {
-      return ApiError('CONFIRMED_CODE_EXPIRED');
+      return new InternalError('CONFIRMED_CODE_EXPIRED');
     }
 
     return true;
@@ -90,11 +90,11 @@ export const accountUnlocked = rule()(async (parent, args, context, info) => {
     .userAccount();
 
   if (!userAccount) {
-    return ApiError('INVALID_USER_INPUT', { args });
+    return new InternalError('INVALID_USER_INPUT', { args });
   }
 
   if (userAccount.locked) {
-    throw ApiError('ACCOUNT_LOCKED');
+    throw new InternalError('ACCOUNT_LOCKED');
   }
 
   return true;
@@ -118,11 +118,11 @@ export const lockedCodeNotExpired = rule()(
     });
 
     if (!userAccount) {
-      throw ApiError('CODE_NOT_FOUND', { code: 'lockedCode' });
+      throw new InternalError('CODE_NOT_FOUND', { code: 'lockedCode' });
     }
 
     if (isBefore(userAccount.lockedExpires, new Date())) {
-      return ApiError('LOCKED_CODE_EXPIRED');
+      return new InternalError('LOCKED_CODE_EXPIRED');
     }
 
     return true;
@@ -147,11 +147,11 @@ export const resetPasswordCodeNotExpired = rule()(
     });
 
     if (!userAccount) {
-      throw ApiError('CODE_NOT_FOUND', { code: 'resetPasswordCode' });
+      throw new InternalError('CODE_NOT_FOUND', { code: 'resetPasswordCode' });
     }
 
     if (isBefore(userAccount.resetPasswordExpires, new Date())) {
-      return ApiError('RESET_PASSWORD_CODE_EXPIRED');
+      return new InternalError('RESET_PASSWORD_CODE_EXPIRED');
     }
 
     return true;

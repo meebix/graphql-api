@@ -6,6 +6,7 @@ datamodel:
   - src/prisma/models/role.prisma
   - src/prisma/models/user.prisma
   - src/prisma/models/security-question.prisma
+  - src/prisma/models/customer.prisma
 
 # Specifies language & location for the generated Prisma client
 generate:
@@ -14,7 +15,7 @@ generate:
 
 # Seed the database with initial data
 seed:
-  run: ts-node ./seeders/seed.ts
+  run: ts-node -r tsconfig-paths/register ./src/seeders/seed.ts
 
 # Setup hooks for different stages of deployment
 hooks:

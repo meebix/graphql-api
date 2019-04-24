@@ -1,6 +1,4 @@
-import { ApolloError } from 'apollo-server-express';
-
-const ERRORS = {
+export default {
   INVALID_USER_INPUT: {
     message: 'User input is invalid',
     code: 'INVALID_USER_INPUT',
@@ -66,32 +64,9 @@ const ERRORS = {
     code: 'INVALID_SECURITY_QUESTIONS',
     meta: { level: 'warn' },
   },
+  CUSTOMER_NOT_FOUND: {
+    message: 'Customer was not found',
+    code: 'CUSTOMER_NOT_FOUND',
+    meta: { level: 'warn' },
+  },
 };
-
-interface Info {
-  [propName: string]: any;
-}
-
-/**
- * A universal error handler
- *
- * @class
- * @param {String} type - The kind of error to be thrown
- * @param {Object} additionalInfo - Additional metadata needed for the error
- * @returns {ApolloError} - An instance of the Apollo error handler
- */
-const ApiError = (type, additionalInfo?: Info) => {
-  const { name, message, ...errProperties }: any =
-    (additionalInfo && additionalInfo.err) || {};
-
-  const error = ERRORS[type];
-  const errMessage = message || error.message;
-  const meta = Object.assign({}, error.meta, {
-    name,
-    ...errProperties,
-  });
-
-  return new ApolloError(errMessage, error.code, meta);
-};
-
-export default ApiError;
