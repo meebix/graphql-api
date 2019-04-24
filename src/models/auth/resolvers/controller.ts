@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import generateCode from '@modules/code';
 import config from 'config';
 import addHours from 'date-fns/add_hours';
-import ApiError from '@modules/errors';
+import { InternalError } from '@modules/errors';
 import logger from '@modules/logger';
 import mailer, {
   WELCOME_EMAIL,
@@ -26,13 +26,13 @@ import * as fragments from '../fragments';
 const registerUser = async (parent, args, context, info) => {
   const role = await context.prisma.role({ name: 'USER' });
 
-  logger.info('USER-RESOLVER: Hashing password');
+  logger.info('AUTH-RESOLVER: Hashing password');
   const password = await argon2.hash(args.input.password, {
     timeCost: 2000,
     memoryCost: 500,
   });
 
-  logger.info('USER-RESOLVER: Creating user');
+  logger.info('AUTH-RESOLVER: Creating user');
   const user = await context.prisma
     .createUser({
       role: { connect: { id: role.id } },
@@ -56,7 +56,7 @@ const registerUser = async (parent, args, context, info) => {
     })
     .$fragment(fragments.registerUserFragment);
 
-  logger.info('USER-RESOLVER: Signing token');
+  logger.info('AUTH-RESOLVER: Signing token');
   const token = jwt.sign(
     { cuid: user.id, role: user.role.name },
     config.get('auth.jwt.secret'),
@@ -67,7 +67,7 @@ const registerUser = async (parent, args, context, info) => {
     ? CONFIRMATION_EMAIL
     : WELCOME_EMAIL;
 
-  logger.info({ emailType }, 'USER-RESOLVER: Sending email');
+  logger.info({ emailType }, 'AUTH-RESOLVER: Sending email');
   await mailer.send(user, emailType);
 
   return {
@@ -87,7 +87,7 @@ const registerUser = async (parent, args, context, info) => {
  * @returns {null}
  */
 const confirmUser = async (parent, args, context, info) => {
-  logger.info('USER-RESOLVER: Confirming account');
+  logger.info('AUTH-RESOLVER: Confirming account');
   const user = await context.prisma
     .updateUserAccount({
       data: {
@@ -101,7 +101,7 @@ const confirmUser = async (parent, args, context, info) => {
     })
     .user();
 
-  logger.info('USER-RESOLVER: Sending welcome email');
+  logger.info('AUTH-RESOLVER: Sending welcome email');
   await mailer.send(user, WELCOME_EMAIL);
 
   return null;
@@ -125,7 +125,7 @@ const loginUser = async (parent, args, context, info) => {
   const passwordMatch = await argon2.verify(user.password, args.input.password);
 
   if (!user) {
-    throw ApiError('INVALID_CREDENTIALS');
+    throw new InternalError('INVALID_CREDENTIALS');
   }
 
   await context.prisma.updateUserAccount({
@@ -152,10 +152,10 @@ const loginUser = async (parent, args, context, info) => {
   });
 
   if (!passwordMatch) {
-    throw ApiError('INVALID_CREDENTIALS');
+    throw new InternalError('INVALID_CREDENTIALS');
   }
 
-  logger.info('USER-RESOLVER: Signing token');
+  logger.info('AUTH-RESOLVER: Signing token');
   const token = jwt.sign(
     { cuid: user.id, role: user.role.name },
     config.get('auth.jwt.secret'),
@@ -185,10 +185,10 @@ const setUserSecurityQuestionAnswers = async (parent, args, context, info) => {
     .$fragment(`{ id }`);
 
   if (!userAccount) {
-    throw ApiError('INVALID_USER_INPUT', { args });
+    throw new InternalError('INVALID_USER_INPUT', { args });
   }
 
-  logger.info("USER-RESOLVER: Setting user's security questions");
+  logger.info("AUTH-RESOLVER: Setting user's security questions");
   for (const item of args.input.answers) {
     await context.prisma.createSecurityQuestionAnswer({
       userAccount: { connect: { id: userAccount.id } },
@@ -212,7 +212,7 @@ const setUserSecurityQuestionAnswers = async (parent, args, context, info) => {
  * @returns {Array} - Answers array of answer objects
  */
 const getUserSecurityQuestionAnswers = async (parent, args, context, info) => {
-  logger.info("USER-RESOLVER: Retrieving user's security question answers");
+  logger.info("AUTH-RESOLVER: Retrieving user's security question answers");
 
   const answers = await context.prisma
     .user({ id: args.input.userId })
@@ -221,7 +221,7 @@ const getUserSecurityQuestionAnswers = async (parent, args, context, info) => {
     .$fragment(fragments.userSecurityQuestionAnswersFragment);
 
   if (!answers) {
-    throw ApiError('INVALID_USER_INPUT', { args });
+    throw new InternalError('INVALID_USER_INPUT', { args });
   }
 
   return answers;
@@ -251,7 +251,7 @@ const verifyUserSecurityQuestionAnswers = async (
     .$fragment(fragments.verifyUserSecurityQuestionAnswersFragment);
 
   if (!user) {
-    throw ApiError('INVALID_USER_INPUT', { args });
+    throw new InternalError('INVALID_USER_INPUT', { args });
   }
 
   args.input.answers.forEach(item => {
@@ -259,7 +259,7 @@ const verifyUserSecurityQuestionAnswers = async (
     answersIn.push(item.answer);
   });
 
-  logger.info("USER-RESOLVER: Verifying user's security answers");
+  logger.info("AUTH-RESOLVER: Verifying user's security answers");
   const answers = await context.prisma
     .user({ email: user.email })
     .userAccount()
@@ -289,7 +289,7 @@ const verifyUserSecurityQuestionAnswers = async (
       },
     });
 
-    throw ApiError('INVALID_SECURITY_QUESTIONS');
+    throw new InternalError('INVALID_SECURITY_QUESTIONS');
   }
 
   return null;
@@ -313,10 +313,10 @@ const resetPassword = async (parent, args, context, info) => {
     .$fragment(`{ id }`);
 
   if (!userAccount) {
-    throw ApiError('INVALID_USER_INPUT', { args });
+    throw new InternalError('INVALID_USER_INPUT', { args });
   }
 
-  logger.info("USER-RESOLVER: Preparing user's password for reset");
+  logger.info("AUTH-RESOLVER: Preparing user's password for reset");
   await context.prisma.updateUserAccount({
     data: {
       resetPasswordCode: generateCode(),
@@ -344,7 +344,7 @@ const resetPassword = async (parent, args, context, info) => {
  * @returns {null}
  */
 const changePassword = async (parent, args, context, info) => {
-  logger.info("USER-RESOLVER: Changing user's password");
+  logger.info("AUTH-RESOLVER: Changing user's password");
   const password = await argon2.hash(args.input.password, {
     timeCost: 2000,
     memoryCost: 500,
@@ -382,7 +382,7 @@ const changePassword = async (parent, args, context, info) => {
  * @returns {null}
  */
 const unlockAccount = async (parent, args, context, info) => {
-  logger.info('USER-RESOLVER: Unlocking account');
+  logger.info('AUTH-RESOLVER: Unlocking account');
   await context.prisma.updateUserAccount({
     data: {
       locked: false,
@@ -415,7 +415,7 @@ const sendAuthEmail = async (parent, args, context, info) => {
     UNLOCK_ACCOUNT_EMAIL,
   };
 
-  logger.info('USER-RESOLVER: Sending email to user');
+  logger.info('AUTH-RESOLVER: Sending email to user');
   await mailer.send(user, emailType[args.input.type]);
 
   return null;

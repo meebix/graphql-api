@@ -6,6 +6,9 @@ import { isAuthenticated } from '@modules/access-rules';
  * @returns {Object} - A Shield object for permission middleware
  */
 export default {
+  Mutation: {
+    '*': isAuthenticated,
+  },
   User: {
     '*': isAuthenticated,
   },
