@@ -4,7 +4,7 @@
   "description": "A GraphQL API server built using Express.js, GraphQL, Prisma, and MySQL",
   "license": "MIT",
   "private": false,
-  "main": "src/app.js",
+  "main": "dist/app.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -22,13 +22,10 @@
     "dist"
   ],
   "scripts": {
-    "build:babel": "babel src -d dist --extensions '.ts,.tsx'",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build": "yarn build:babel && yarn build:types",
-    "start": "ts-node -r tsconfig-paths/register src/app.ts",
+    "build": "tsc && babel src -d dist --extensions '.ts,.tsx' --copy-files",
+    "start": "NODE_ENV=production node -r ts-node/register -r tsconfig-paths/register dist/app.js",
+    "dev": "ts-node -r tsconfig-paths/register src/app.ts",
     "watch": "nodemon src/app.ts --exec 'ts-node -r tsconfig-paths/register'",
-    "ts": "tsc --noEmit",
-    "ts:watch": "yarn ts --watch",
     "lint": "tslint --project .",
     "lint:fix": "tslint --fix --project .",
     "prettier:fix": "prettier \"**/*.{ts,tsx}\" --write",

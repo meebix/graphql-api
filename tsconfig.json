@@ -6,6 +6,7 @@
     "noImplicitAny": false,
     "moduleResolution": "node",
     "sourceMap": true,
+    "noEmit": true,
     "outDir": "dist",
     "rootDir": "src",
     "typeRoots": ["node_modules/@types", "typings"],
@@ -29,6 +30,6 @@
       "@prisma/*": ["prisma/*"]
     }
   },
-  "include": ["src/**/*", "src/seeders/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
