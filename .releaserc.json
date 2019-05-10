@@ -1,5 +1,5 @@
 {
-  "repositoryUrl": "https://github.com/doc-kits/react.git",
+  "repositoryUrl": "https://github.com/meebix/graphql-api.git",
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",

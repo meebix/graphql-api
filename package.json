@@ -24,8 +24,7 @@
   "scripts": {
     "build": "tsc && babel src -d dist --extensions '.ts,.tsx' --copy-files",
     "start": "NODE_ENV=production node -r ts-node/register -r tsconfig-paths/register dist/app.js",
-    "dev": "ts-node -r tsconfig-paths/register src/app.ts",
-    "watch": "nodemon src/app.ts --exec 'ts-node -r tsconfig-paths/register'",
+    "dev": "nodemon src/app.ts --exec 'ts-node -r tsconfig-paths/register'",
     "lint": "tslint --project .",
     "lint:fix": "tslint --fix --project .",
     "prettier:fix": "prettier \"**/*.{ts,tsx}\" --write",

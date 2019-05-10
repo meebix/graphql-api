@@ -75,14 +75,18 @@ server.applyMiddleware({
   app,
   path: config.get('graphql.path'),
   cors: {
-    origin: 'http://localhost:8080',
+    origin: 'http://localhost:3000',
     optionsSuccessStatus: 200,
   },
   bodyParserConfig: true,
 });
 
 // Start GraphQL server
-app.listen({ port: config.get('port') }, () => {
+app.listen({ port: config.get('port') }, err => {
+  if (err) {
+    throw err;
+  }
+
   logger.info(
     {
       port: config.get('port'),
